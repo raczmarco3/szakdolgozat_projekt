@@ -12,14 +12,14 @@ class ProductRequestDto
     private string $name;
     #[Assert\NotBlank]
     #[Assert\Range(
-        min: 1,
+        min: 1
     )]
-    private int $price;
+    private mixed $price;
     #[Assert\NotBlank]
     #[Assert\Range(
-        min: 1,
+        min: 1
     )]
-    private int $category_id;
+    private mixed $category_id;
 
     /**
      * @return string
@@ -38,33 +38,33 @@ class ProductRequestDto
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getPrice(): int
+    public function getPrice(): mixed
     {
         return $this->price;
     }
 
     /**
-     * @param int $price
+     * @param mixed $price
      */
-    public function setPrice(int $price): void
+    public function setPrice(mixed $price): void
     {
         $this->price = $price;
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getCategoryId(): int
+    public function getCategoryId(): mixed
     {
         return $this->category_id;
     }
 
     /**
-     * @param int $category_id
+     * @param mixed $category_id
      */
-    public function setCategoryId(int $category_id): void
+    public function setCategoryId(mixed $category_id): void
     {
         $this->category_id = $category_id;
     }
