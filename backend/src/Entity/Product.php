@@ -29,11 +29,11 @@ class Product
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
-
+/*
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-
+*/
     #[ORM\Column(type: Types::SMALLINT, options: ["default" => 0])]
     private ?int $deleted = null;
 
@@ -66,7 +66,7 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?Category
+    public function getCategory(): Category
     {
         return $this->category;
     }
@@ -94,7 +94,7 @@ class Product
 
         return $this;
     }
-
+/*
     public function getUser(): ?User
     {
         return $this->user;
@@ -106,7 +106,7 @@ class Product
 
         return $this;
     }
-
+*/
     public function getDeleted(): ?int
     {
         return $this->deleted;

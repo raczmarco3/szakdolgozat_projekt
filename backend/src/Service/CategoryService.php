@@ -15,7 +15,7 @@ class CategoryService
 {
     public function addCategory(CategoryRepository $categoryRepository, CategoryRequestDto $categoryRequestDto): JsonResponse
     {
-        $category = $categoryRepository->findby(["name" => $categoryRequestDto->getName()]);
+        $category = $categoryRepository->findOneby(["name" => $categoryRequestDto->getName()]);
 
         if($category) {
             return new JsonResponse(["msg" => "This category already exists!"], 403);
@@ -70,7 +70,7 @@ class CategoryService
             return new JsonResponse(["msg" => "Category not found!"], 404);
         }
 
-        if($categoryRequestDto->getName() != $category->getName() && $categoryRepository->findBy(["name" => $categoryRequestDto->getName()])) {
+        if($categoryRequestDto->getName() != $category->getName() && $categoryRepository->findOneBy(["name" => $categoryRequestDto->getName()])) {
             return new JsonResponse(["msg" => "This category already exists!"], 403);
         }
 
