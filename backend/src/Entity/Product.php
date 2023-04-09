@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,6 +37,13 @@ class Product
 */
     #[ORM\Column(type: Types::SMALLINT, options: ["default" => 0])]
     private ?int $deleted = null;
+
+    public function __construct()
+    {
+        if(is_null($this->createdAt)) {
+            $this->createdAt = new DateTimeImmutable("now");
+        }
+    }
 
     public function getId(): ?int
     {

@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\ProductRequestDto;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
+use App\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +20,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/add", methods={"GET"})
+     * @Route("/add", methods={"POST"})
      */
-    public function addNewProduct(Request $request, SerializerInterface $serializer, ValidatorInterface $validator): JsonResponse
+    public function addNewProduct(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,
+                                  ProductService $productService, CategoryRepository $categoryRepository, ProductRepository $productRepository): JsonResponse
     {
         $acceptableContentTypes = $request->getAcceptableContentTypes();
 
@@ -38,6 +42,6 @@ class ProductController extends AbstractController
             return ValidationErrorJsonConverter::convertValidationErrors($errors, $serializer);
         }
 
-        return new JsonResponse(["msg" => "siker"]);
+        return $productService->addNewProduct($productRepository, $categoryRepository, $productRequestDto);
     }
 }
