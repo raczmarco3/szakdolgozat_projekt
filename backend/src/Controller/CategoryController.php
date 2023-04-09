@@ -60,6 +60,10 @@ class CategoryController extends AbstractController
      */
     public function deleteCategory(CategoryRepository $categoryRepository, $id): JsonResponse
     {
+        if(!is_numeric($id)) {
+            return new JsonResponse(["msg" => "id must be a number!"], 422);
+        }
+
         $categoryService = new CategoryService();
         return $categoryService->deleteCategory($id, $categoryRepository);
     }

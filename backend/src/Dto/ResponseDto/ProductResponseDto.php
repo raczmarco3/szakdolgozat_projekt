@@ -60,27 +60,27 @@ class ProductResponseDto
     }
 
     /**
-     * @return CategoryResponseDto
+     * @return string
      */
-    public function getCategory(): CategoryResponseDto
+    public function getCategory(): string
     {
         return $this->category;
     }
 
     /**
-     * @param CategoryResponseDto $category
+     * @param string $category
      */
-    public function setCategory(CategoryResponseDto $category): void
+    public function setCategory(string $category): void
     {
         $this->category = $category;
     }
 
     /**
-     * @return \DateTimeImmutable|null
+     * @return string
      */
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): string
     {
-        return $this->createdAt;
+        return $this->createdAt->format("Y-m-d h:i:s");
     }
 
     /**
@@ -92,11 +92,11 @@ class ProductResponseDto
     }
 
     /**
-     * @return \DateTimeImmutable|null
+     * @return string
      */
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): string
     {
-        return $this->updatedAt;
+        return $this->updatedAt->format("Y-m-d h:i:s");
     }
 
     /**
