@@ -30,13 +30,13 @@ class Product
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
-/*
+
+    #[ORM\Column(type: Types::SMALLINT, options: ["default" => 0])]
+    private ?int $deleted = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-*/
-    #[ORM\Column(type: Types::SMALLINT, options: ["default" => 0])]
-    private ?int $deleted = null;
 
     public function __construct()
     {
@@ -102,19 +102,7 @@ class Product
 
         return $this;
     }
-/*
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
 
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-*/
     public function getDeleted(): ?int
     {
         return $this->deleted;
@@ -123,6 +111,18 @@ class Product
     public function setDeleted(int $deleted): self
     {
         $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
