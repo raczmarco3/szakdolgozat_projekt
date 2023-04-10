@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\ProductRequestDto;
+use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Service\ProductService;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /**
  *  @Route("/api/product")
@@ -24,7 +26,8 @@ class ProductController extends AbstractController
      * @Route("/add", methods={"POST"})
      */
     public function addNewProduct(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,
-                                  ProductService $productService, CategoryRepository $categoryRepository, ProductRepository $productRepository): JsonResponse
+                                  ProductService $productService, CategoryRepository $categoryRepository,
+                                  ProductRepository $productRepository, #[CurrentUser] ?User $user): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -48,7 +51,7 @@ class ProductController extends AbstractController
             return ValidationErrorJsonConverter::convertValidationErrors($errors, $serializer);
         }
 
-        return $productService->addNewProduct($productRepository, $categoryRepository, $productRequestDto);
+        return $productService->addNewProduct($productRepository, $categoryRepository, $productRequestDto, $user);
     }
 
     /**

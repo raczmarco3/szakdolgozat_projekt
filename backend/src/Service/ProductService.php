@@ -7,6 +7,7 @@ use App\Dto\RequestDto\ProductRequestDto;
 use App\Dto\ResponseDto\CategoryResponseDto;
 use App\Dto\ResponseDto\ProductResponseDto;
 use App\Entity\Product;
+use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use DateTimeImmutable;
@@ -16,7 +17,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ProductService
 {
-    public function addNewProduct(ProductRepository $productRepository, CategoryRepository $categoryRepository, ProductRequestDto $productRequestDto): JsonResponse
+    public function addNewProduct(ProductRepository $productRepository, CategoryRepository $categoryRepository,
+                                  ProductRequestDto $productRequestDto, User $user): JsonResponse
     {
         $product = $productRepository->findOneBy(["name" => $productRequestDto->getName()]);
 
@@ -32,6 +34,7 @@ class ProductService
             return new JsonResponse(["msg" => "Category not found!"], 404);
         }
         $product->setCategory($category);
+        $product->setUser($user);
 
         $productRepository->save($product, true);
         return new JsonResponse(["msg" => "Product created!"], 201);
