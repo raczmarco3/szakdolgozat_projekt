@@ -25,6 +25,11 @@ class CategoryController extends AbstractController
     public function addCategory(CategoryRepository $categoryRepository,SerializerInterface $serializer,
                                 ValidatorInterface $validator, Request $request): JsonResponse
     {
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
+
         $acceptableContentTypes = $request->getAcceptableContentTypes();
 
         if(empty($request->getContent())) {
@@ -60,6 +65,11 @@ class CategoryController extends AbstractController
      */
     public function deleteCategory(CategoryRepository $categoryRepository, $id): JsonResponse
     {
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
+
         if(!is_numeric($id)) {
             return new JsonResponse(["msg" => "id must be a number!"], 422);
         }
@@ -75,6 +85,11 @@ class CategoryController extends AbstractController
                                  Request $request, SerializerInterface $serializer, ValidatorInterface $validator,
                                  $id): JsonResponse
     {
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
+
         $acceptableContentTypes = $request->getAcceptableContentTypes();
 
         if(empty($request->getContent())) {
