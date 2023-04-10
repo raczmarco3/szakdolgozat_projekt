@@ -26,7 +26,10 @@ class ProductController extends AbstractController
     public function addNewProduct(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,
                                   ProductService $productService, CategoryRepository $categoryRepository, ProductRepository $productRepository): JsonResponse
     {
-        return $this->checkPermission($this->isGranted('ROLE_ADMIN'));
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
 
         $acceptableContentTypes = $request->getAcceptableContentTypes();
 
@@ -61,7 +64,10 @@ class ProductController extends AbstractController
      */
     public function deleteProduct(ProductRepository $productRepository, ProductService $productService, $id): JsonResponse
     {
-        return $this->checkPermission($this->isGranted('ROLE_ADMIN'));
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
 
         if(!is_numeric($id)) {
             return new JsonResponse(["msg" => "id must be a number!"], 422);
@@ -77,7 +83,10 @@ class ProductController extends AbstractController
                                 EntityManagerInterface $entityManager, Request $request, ProductService $productService,
                                 SerializerInterface $serializer, ValidatorInterface $validator, $id): JsonResponse
     {
-        return $this->checkPermission($this->isGranted('ROLE_ADMIN'));
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
 
         $acceptableContentTypes = $request->getAcceptableContentTypes();
 
@@ -104,13 +113,6 @@ class ProductController extends AbstractController
         }
 
         return $productService->editProduct($id, $productRepository, $categoryRepository, $productRequestDto, $entityManager);
-    }
-
-    private function checkPermission($hasAccess): JsonResponse
-    {
-        if(!$hasAccess) {
-            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
-        }
     }
 }
 

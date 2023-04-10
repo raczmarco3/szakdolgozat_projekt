@@ -19,4 +19,8 @@ class ApiLoginController extends AbstractController
 
         return new JsonResponse(["msg" => "Bejelentkezés sikeres!"], 200);
     }
+
+    #[Route('/api/logout', name: 'app_logout', methods: ['GET'])]
+    public function logout()
+    { }
 }
