@@ -97,9 +97,10 @@ class ProductService
         if(!$category) {
             return new JsonResponse(["msg" => "Category not found!"], 404);
         }
-        $product->setCategory($category);
 
+        $product->setCategory($category);
         $entityManager->flush();
+
         return new JsonResponse(["msg" => "Product updated!"], 200);
     }
 

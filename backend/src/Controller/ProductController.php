@@ -57,7 +57,8 @@ class ProductController extends AbstractController
     /**
      * @Route("/all", methods={"GET"})
      */
-    public function getProducts(SerializerInterface $serializer, ProductRepository $productRepository, ProductService $productService): JsonResponse
+    public function getProducts(SerializerInterface $serializer, ProductRepository $productRepository,
+                                ProductService $productService): JsonResponse
     {
         return $productService->getProducts($serializer, $productRepository);
     }
