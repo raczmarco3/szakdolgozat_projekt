@@ -22,7 +22,7 @@ class CategoryController extends AbstractController
     /**
      * @Route ("/add", methods={"POST"})
      */
-    public function addCategory(CategoryRepository $categoryRepository,SerializerInterface $serializer,
+    public function addCategory(CategoryRepository $categoryRepository, SerializerInterface $serializer,
                                 ValidatorInterface $validator, Request $request): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
