@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\RequestDto\UserRequestDto;
+use App\Repository\CartRepository;
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,7 @@ class UserController extends AbstractController
      * @Route("/register", methods={"POST"})
      */
     public function register(Request $request, SerializerInterface $serializer, UserPasswordHasherInterface $passwordHasher,
-                             UserService $userService, UserRepository $userRepository): JsonResponse
+                             UserService $userService, UserRepository $userRepository, CartRepository $cartRepository): JsonResponse
     {
         $acceptableContentTypes = $request->getAcceptableContentTypes();
 
@@ -35,6 +36,6 @@ class UserController extends AbstractController
 
         $userRequestDto = $serializer->deserialize($request->getContent(), UserRequestDto::class, 'json');
 
-        return $userService->register($userRepository, $userRequestDto, $passwordHasher);
+        return $userService->register($userRepository, $userRequestDto, $passwordHasher, $cartRepository);
     }
 }
