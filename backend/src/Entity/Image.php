@@ -18,7 +18,7 @@ class Image
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
-    #[ORM\Column(type: Types::BLOB)]
+    #[ORM\Column(type: Types::TEXT)]
     private $image = null;
 
     #[ORM\ManyToOne]

@@ -8,6 +8,7 @@ use App\Dto\ResponseDto\CartResposneDto;
 use App\Dto\ResponseDto\ProductResponseDto;
 use App\Entity\User;
 use App\Repository\CartRepository;
+use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +36,7 @@ class CartService
     }
 
     public function getCart(CartRepository $cartRepository, User $user, SerializerInterface $serializer,
-                            ProductRepository $productRepository): JsonResponse
+                            ProductRepository $productRepository, ImageRepository $imageRepository): JsonResponse
     {
         $cart = $cartRepository->findOneBy(["user" => $user]);
         $productsArray = $cart->getProducts();
@@ -52,6 +53,10 @@ class CartService
                 $productResponseDto->setCategory($product->getCategory()->getName());
                 $productResponseDto->setUpdatedAt($product->getUpdatedAt());
                 $productResponseDto->setCreatedAt($product->getCreatedAt());
+                $image = $imageRepository->findOneBy(["product" => $product]);
+                if($image) {
+                    $productResponseDto->setImageData($image->getImage());
+                }
 
                 $productResponseDtoArray[] = $productResponseDto;
             }

@@ -10,6 +10,7 @@ class ProductResponseDto
     private string $category;
     private ?\DateTimeImmutable $createdAt;
     private ?\DateTimeImmutable $updatedAt;
+    private $imageData;
 
     /**
      * @return int
@@ -105,5 +106,15 @@ class ProductResponseDto
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getImageData()
+    {
+        return $this->imageData;
+    }
+
+    public function setImageData($imageData)
+    {
+        $this->imageData = $imageData;
     }
 }

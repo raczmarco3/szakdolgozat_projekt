@@ -6,9 +6,11 @@ use App\Converter\JsonConverter;
 use App\Dto\RequestDto\ProductRequestDto;
 use App\Dto\ResponseDto\CategoryResponseDto;
 use App\Dto\ResponseDto\ProductResponseDto;
+use App\Entity\Image;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Repository\CategoryRepository;
+use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +20,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ProductService
 {
     public function addNewProduct(ProductRepository $productRepository, CategoryRepository $categoryRepository,
-                                  ProductRequestDto $productRequestDto, User $user): JsonResponse
+                                  ProductRequestDto $productRequestDto, User $user, String $imgData,
+                                  ImageRepository $imageRepository): JsonResponse
     {
         $product = $productRepository->findOneBy(["name" => $productRequestDto->getName()]);
 
@@ -37,10 +40,19 @@ class ProductService
         $product->setUser($user);
 
         $productRepository->save($product, true);
+
+        if(!empty($imgData)) {
+            $image = new Image();
+            $image->setImage($imgData);
+            $image->setProduct($product);
+            $image->setUser($user);
+
+            $imageRepository->save($image, true);
+        }
         return new JsonResponse(["msg" => "Product created!"], 201);
     }
 
-    public function getProducts(SerializerInterface $serializer, ProductRepository $productRepository): JsonResponse
+    public function getProducts(SerializerInterface $serializer, ProductRepository $productRepository, ImageRepository $imageRepository): JsonResponse
     {
         $products = $productRepository->findAll();
 
@@ -60,6 +72,10 @@ class ProductService
                 $productResponseDto->setCategory($product->getCategory()->getName());
                 $productResponseDto->setCreatedAt($product->getCreatedAt());
                 $productResponseDto->setUpdatedAt($product->getUpdatedAt());
+                $image = $imageRepository->findOneBy(["product" => $product]);
+                if($image) {
+                    $productResponseDto->setImageData($image->getImage());
+                }
 
                 $productResponseDtoArray[] = $productResponseDto;
             }
@@ -80,7 +96,8 @@ class ProductService
     }
 
     public function editProduct($id, ProductRepository $productRepository, CategoryRepository $categoryRepository,
-                                ProductRequestDto $productRequestDto, EntityManagerInterface $entityManager): JsonResponse
+                                ProductRequestDto $productRequestDto, EntityManagerInterface $entityManager, String $imgData,
+                                ImageRepository $imageRepository, User $user): JsonResponse
     {
         $product = $productRepository->find($id);
 
@@ -100,6 +117,15 @@ class ProductService
 
         $product->setCategory($category);
         $entityManager->flush();
+
+        if(!empty($imgData)) {
+            $image = new Image();
+            $image->setImage($imgData);
+            $image->setProduct($product);
+            $image->setUser($user);
+
+            $imageRepository->save($image, true);
+        }
 
         return new JsonResponse(["msg" => "Product updated!"], 200);
     }

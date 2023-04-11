@@ -6,6 +6,7 @@ use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\ProductRequestDto;
 use App\Entity\User;
 use App\Repository\CategoryRepository;
+use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
 use App\Service\ProductService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,7 +28,7 @@ class ProductController extends AbstractController
      */
     public function addNewProduct(Request $request, SerializerInterface $serializer, ValidatorInterface $validator,
                                   ProductService $productService, CategoryRepository $categoryRepository,
-                                  ProductRepository $productRepository, #[CurrentUser] ?User $user): JsonResponse
+                                  ProductRepository $productRepository, #[CurrentUser] ?User $user, ImageRepository $imageRepository): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -35,15 +36,19 @@ class ProductController extends AbstractController
         }
 
         $acceptableContentTypes = $request->getAcceptableContentTypes();
+        $data = json_decode($request->getContent(), true);
 
         if(empty($request->getContent())) {
             return new JsonResponse(["msg" => "HTTP body is empty"], 400);
         } else if(count($acceptableContentTypes)>1 || $acceptableContentTypes[0] != "application/json") {
             return new JsonResponse(["msg" => "application/json is the only acceptable content type!"], 406);
-        } else if(json_decode($request->getContent()) === null) {
+        } else if($data === null) {
             return new JsonResponse(["msg" => "The content of the body should be json!"], 400);
+        } else if(empty($data["imgData"])) {
+            return new JsonResponse(["msg" => "All product must have a picture!"], 403);
         }
 
+        $imgData = $data["imgData"];
         $productRequestDto = $serializer->deserialize($request->getContent(), ProductRequestDto::class, 'json');
 
         $errors = $validator->validate($productRequestDto);
@@ -51,16 +56,16 @@ class ProductController extends AbstractController
             return ValidationErrorJsonConverter::convertValidationErrors($errors, $serializer);
         }
 
-        return $productService->addNewProduct($productRepository, $categoryRepository, $productRequestDto, $user);
+        return $productService->addNewProduct($productRepository, $categoryRepository, $productRequestDto, $user, $imgData, $imageRepository);
     }
 
     /**
      * @Route("/all", methods={"GET"})
      */
     public function getProducts(SerializerInterface $serializer, ProductRepository $productRepository,
-                                ProductService $productService): JsonResponse
+                                ProductService $productService, ImageRepository $imageRepository): JsonResponse
     {
-        return $productService->getProducts($serializer, $productRepository);
+        return $productService->getProducts($serializer, $productRepository, $imageRepository);
     }
 
     /**
@@ -85,7 +90,8 @@ class ProductController extends AbstractController
      */
     public function editProduct(ProductRepository $productRepository, CategoryRepository $categoryRepository,
                                 EntityManagerInterface $entityManager, Request $request, ProductService $productService,
-                                SerializerInterface $serializer, ValidatorInterface $validator, $id): JsonResponse
+                                SerializerInterface $serializer, ValidatorInterface $validator, $id,
+                                ImageRepository $imageRepository, #[CurrentUser] ?User $user): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -93,22 +99,25 @@ class ProductController extends AbstractController
         }
 
         $acceptableContentTypes = $request->getAcceptableContentTypes();
+        $data = json_decode($request->getContent(), true);
 
         if(empty($request->getContent())) {
             return new JsonResponse(["msg" => "HTTP body is empty"], 400);
         } else if(count($acceptableContentTypes)>1 || $acceptableContentTypes[0] != "application/json") {
             return new JsonResponse(["msg" => "application/json is the only acceptable content type!"], 406);
-        } else if(json_decode($request->getContent()) === null) {
+        } else if($data === null) {
             return new JsonResponse(["msg" => "The content of the body should be json!"], 400);
+        } else if(empty($data["imgData"])) {
+            return new JsonResponse(["msg" => "All product must have a picture!"], 403);
         }
 
-        $data = json_decode($request->getContent(), true);
         if(!isset($data["id"]) || !is_numeric($data["id"]) || !is_numeric($id)) {
             return new JsonResponse(["msg" => "id must be a number!"], 422);
         } else if($data["id"] != $id) {
             return new JsonResponse(["msg" => "You don't have permission to edit this product!"], 403);
         }
 
+        $imgData = $data["imgData"];
         $productRequestDto = $serializer->deserialize($request->getContent(), ProductRequestDto::class, 'json');
 
         $errors = $validator->validate($productRequestDto);
@@ -116,7 +125,7 @@ class ProductController extends AbstractController
             return ValidationErrorJsonConverter::convertValidationErrors($errors, $serializer);
         }
 
-        return $productService->editProduct($id, $productRepository, $categoryRepository, $productRequestDto, $entityManager);
+        return $productService->editProduct($id, $productRepository, $categoryRepository, $productRequestDto, $entityManager, $imgData, $imageRepository, $user);
     }
 }
 

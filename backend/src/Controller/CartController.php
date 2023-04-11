@@ -6,6 +6,7 @@ use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\CartRequestDto;
 use App\Entity\User;
 use App\Repository\CartRepository;
+use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
 use App\Service\CartService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -58,14 +59,14 @@ class CartController extends AbstractController
      * @Route("/get", methods={"GET"})
      */
     public function getCart(CartRepository $cartRepository, SerializerInterface $serializer, ProductRepository $productRepository,
-                            #[CurrentUser] ?User $user, CartService $cartService): JsonResponse
+                            #[CurrentUser] ?User $user, CartService $cartService, ImageRepository $imageRepository): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_USER');
         if(!$hasAccess) {
             return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
         }
 
-        return $cartService->getCart($cartRepository, $user, $serializer, $productRepository);
+        return $cartService->getCart($cartRepository, $user, $serializer, $productRepository, $imageRepository);
     }
 
     /**
