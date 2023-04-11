@@ -3,29 +3,29 @@
 namespace App\Controller;
 
 use App\Converter\ValidationErrorJsonConverter;
-use App\Dto\RequestDto\MethodRequestDto;
+use App\Dto\RequestDto\StatusRequestDto;
 use App\Entity\User;
-use App\Repository\MethodRepository;
-use App\Service\MethodService;
+use App\Repository\StatusRepository;
+use App\Service\StatusService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /**
- * @Route("/api/method")
+ * @Route("/api/status")
  */
-class MethodController extends AbstractController
+class StatusController extends AbstractController
 {
     /**
      * @Route("/add", methods={"POST"})
      */
-    public function addNewMethod(MethodRepository $methodRepository, MethodService $methodService, #[CurrentUser] ?User $user,
-                                 SerializerInterface $serializer, ValidatorInterface $validator, Request $request): JsonResponse
+    public function addStatus(StatusRepository $statusRepository, #[CurrentUser] ?User $user, StatusService $statusService,
+                              SerializerInterface $serializer, ValidatorInterface $validator, Request $request): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -42,29 +42,29 @@ class MethodController extends AbstractController
             return new JsonResponse(["msg" => "The content of the body should be json!"], 400);
         }
 
-        $methodRequestDto = $serializer->deserialize($request->getContent(), MethodRequestDto::class, 'json');
+        $statusRequestDto = $serializer->deserialize($request->getContent(), StatusRequestDto::class, 'json');
 
-        $errors = $validator->validate($methodRequestDto);
+        $errors = $validator->validate($statusRequestDto);
         if (count($errors) > 0) {
             return ValidationErrorJsonConverter::convertValidationErrors($errors, $serializer);
         }
 
-        return $methodService->addNewMethod($methodRepository, $methodRequestDto, $user);
+        return $statusService->addStatus($statusRepository, $statusRequestDto, $user);
     }
 
     /**
-     * @Route("/all", methods={"GET"})
+     * @Route("/get", methods={"GET"})
      */
-    public function getMethods(SerializerInterface $serializer, MethodRepository $methodRepository,
-                                  MethodService $methodService): JsonResponse
+    public function getStatuses(SerializerInterface $serializer, StatusRepository $statusRepository,
+                                StatusService $statusService): JsonResponse
     {
-        return $methodService->getMethods($serializer, $methodRepository);
+        return $statusService->getStatuses($serializer, $statusRepository);
     }
 
     /**
      * @Route("/delete/{id}", methods={"DELETE"})
      */
-    public function deleteMethod($id, MethodRepository $methodRepository, MethodService $methodService): JsonResponse
+    public function deleteStatus($id, StatusRepository $statusRepository, StatusService $statusService): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -75,14 +75,14 @@ class MethodController extends AbstractController
             return new JsonResponse(["msg" => "id must be a number!"], 422);
         }
 
-        return $methodService->deleteMethod($id, $methodRepository);
+        return $statusService->deleteStatus($id, $statusRepository);
     }
 
     /**
      * @Route("/edit/{id}", methods={"PUT"})
      */
-    public function editMethod($id, MethodRepository $methodRepository, EntityManagerInterface $entityManager, ValidatorInterface $validator,
-                               MethodService $methodService, SerializerInterface $serializer, Request $request): JsonResponse
+    public function editStatus($id, StatusRepository $statusRepository, EntityManagerInterface $entityManager, Request $request,
+                               StatusService $statusService, SerializerInterface $serializer, ValidatorInterface $validator): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -103,17 +103,17 @@ class MethodController extends AbstractController
         if(!isset($data["id"]) || !is_numeric($data["id"]) || !is_numeric($id)) {
             return new JsonResponse(["msg" => "id must be a number!"], 422);
         } else if($data["id"] != $id) {
-            return new JsonResponse(["msg" => "You don't have permission to edit this payment method!"], 403);
+            return new JsonResponse(["msg" => "You don't have permission to edit this status!"], 403);
         }
 
-        $methodRequestDto = $serializer->deserialize($request->getContent(), MethodRequestDto::class, 'json');
+        $statusRequestDto = $serializer->deserialize($request->getContent(), StatusRequestDto::class, 'json');
 
-        $errors = $validator->validate($methodRequestDto);
+        $errors = $validator->validate($statusRequestDto);
         if (count($errors) > 0) {
             return ValidationErrorJsonConverter::convertValidationErrors($errors, $serializer);
         }
 
-        return $methodService->editMethod($id, $methodRepository, $methodRequestDto, $entityManager);
+        return $statusService->editStatus($id, $statusRepository, $statusRequestDto, $entityManager);
     }
 
 }
