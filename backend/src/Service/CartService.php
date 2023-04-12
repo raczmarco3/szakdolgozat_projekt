@@ -21,7 +21,7 @@ class CartService
     {
         $product = $productRepository->find($cartRequestDto->getProductId());
 
-        if(!$product) {
+        if(!$product || $product->getDeleted() == 1) {
             return new JsonResponse(["msg" => "Product not found!"], 404);
         }
 
@@ -36,16 +36,18 @@ class CartService
     }
 
     public function getCart(CartRepository $cartRepository, User $user, SerializerInterface $serializer,
-                            ProductRepository $productRepository, ImageRepository $imageRepository): JsonResponse
+                            ProductRepository $productRepository, ImageRepository $imageRepository,
+                            EntityManagerInterface $entityManager): JsonResponse
     {
         $cart = $cartRepository->findOneBy(["user" => $user]);
         $productsArray = $cart->getProducts();
         $productResponseDtoArray = [];
+        $availableProducts = [];
 
         foreach ($productsArray as $product_id)
         {
             $product = $productRepository->find($product_id);
-            if($product) {
+            if($product && $product->getDeleted() == 0) {
                 $productResponseDto = new ProductResponseDto();
                 $productResponseDto->setId($product->getId());
                 $productResponseDto->setName($product->getName());
@@ -53,13 +55,21 @@ class CartService
                 $productResponseDto->setCategory($product->getCategory()->getName());
                 $productResponseDto->setUpdatedAt($product->getUpdatedAt());
                 $productResponseDto->setCreatedAt($product->getCreatedAt());
+
                 $image = $imageRepository->findOneBy(["product" => $product]);
                 if($image) {
                     $productResponseDto->setImageData($image->getImage());
                 }
 
                 $productResponseDtoArray[] = $productResponseDto;
+                $availableProducts[] = $product_id;
             }
+        }
+
+        //if there are "deleted" products they can't be in the cart
+        if(count($availableProducts) != count($productsArray)) {
+            $cart->setProducts($availableProducts);
+            $entityManager->flush();
         }
 
         $cartResponseDto = new CartResposneDto();

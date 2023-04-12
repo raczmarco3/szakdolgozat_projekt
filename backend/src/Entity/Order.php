@@ -36,7 +36,7 @@ class Order
     private ?Status $status = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $admin = null;
 
     public function getId(): ?int

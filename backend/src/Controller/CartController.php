@@ -59,14 +59,15 @@ class CartController extends AbstractController
      * @Route("/get", methods={"GET"})
      */
     public function getCart(CartRepository $cartRepository, SerializerInterface $serializer, ProductRepository $productRepository,
-                            #[CurrentUser] ?User $user, CartService $cartService, ImageRepository $imageRepository): JsonResponse
+                            #[CurrentUser] ?User $user, CartService $cartService, ImageRepository $imageRepository,
+                            EntityManagerInterface $entityManager): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_USER');
         if(!$hasAccess) {
             return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
         }
 
-        return $cartService->getCart($cartRepository, $user, $serializer, $productRepository, $imageRepository);
+        return $cartService->getCart($cartRepository, $user, $serializer, $productRepository, $imageRepository, $entityManager);
     }
 
     /**
