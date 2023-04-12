@@ -6,6 +6,7 @@ use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\OrderRequestDto;
 use App\Entity\User;
 use App\Repository\CartRepository;
+use App\Repository\ImageRepository;
 use App\Repository\MethodRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
@@ -58,6 +59,36 @@ class OrderController extends AbstractController
 
         return $orderService->orderProducts($orderRepository, $orderRequestDto, $entityManager, $cartRepository, $user,
             $productRepository, $methodRepository, $statusRepository);
+    }
+
+    /**
+     * @Route("/get", methods={"GET"})
+     */
+    public function getOrders(OrderRepository $orderRepository, ProductRepository $productRepository,
+                              SerializerInterface $serializer, ImageRepository $imageRepository,
+                              OrderService $orderService): JsonResponse
+    {
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
+
+        return $orderService->getOrders($orderRepository, $productRepository, $serializer, $imageRepository, null);
+    }
+
+    /**
+     * @Route("/get/own", methods={"GET"})
+     */
+    public function getOwnOrders(OrderRepository $orderRepository, ProductRepository $productRepository,
+                              SerializerInterface $serializer, ImageRepository $imageRepository,
+                              OrderService $orderService, #[CurrentUser] ?User $user): JsonResponse
+    {
+        $hasAccess = $this->isGranted('ROLE_USER');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
+
+        return $orderService->getOrders($orderRepository, $productRepository, $serializer, $imageRepository, $user);
     }
 
 
