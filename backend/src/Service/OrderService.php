@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Converter\JsonConverter;
 use App\Dto\RequestDto\OrderRequestDto;
+use App\Dto\RequestDto\OrderStatusChangeRequestDto;
 use App\Dto\ResponseDto\OrderResponseDto;
 use App\Dto\ResponseDto\ProductResponseDto;
 use App\Entity\Order;
@@ -124,6 +125,27 @@ class OrderService
         }
 
         return JsonConverter::jsonResponseConverter($serializer, $orderResponseDtoArray);
+    }
+
+    public function changeOrderStatus(StatusRepository $statusRepository, OrderRepository $orderRepository, User $user,
+                                      OrderStatusChangeRequestDto $orderStatusChangeRequestDto,
+                                      EntityManagerInterface $entityManager): JsonResponse
+    {
+        $order = $orderRepository->find($orderStatusChangeRequestDto->getOrderId());
+        if(!$order) {
+            return new JsonResponse(["msg" => "Order not found!"], 404);
+        }
+
+        $status = $statusRepository->find($orderStatusChangeRequestDto->getStatusId());
+        if(!$status) {
+            return new JsonResponse(["msg" => "Status not found!"], 404);
+        }
+
+        $order->setStatus($status);
+        $order->setAdmin($user);
+        $entityManager->flush();
+
+        return new JsonResponse(["msg" => "Status updated!"], 200);
     }
 
 }

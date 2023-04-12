@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\OrderRequestDto;
+use App\Dto\RequestDto\OrderStatusChangeRequestDto;
 use App\Entity\User;
 use App\Repository\CartRepository;
 use App\Repository\ImageRepository;
@@ -89,6 +90,39 @@ class OrderController extends AbstractController
         }
 
         return $orderService->getOrders($orderRepository, $productRepository, $serializer, $imageRepository, $user);
+    }
+
+    /**
+     * @Route("/status", methods={"PUT"})
+     */
+    public function changeOrderStatus(StatusRepository $statusRepository, OrderRepository $orderRepository,
+                                      #[CurrentUser] ?User $user, EntityManagerInterface $entityManager,
+                                      OrderService $orderService, SerializerInterface $serializer,
+                                      ValidatorInterface $validator, Request $request): JsonResponse
+    {
+        $hasAccess = $this->isGranted('ROLE_ADMIN');
+        if(!$hasAccess) {
+            return new JsonResponse(["msg" => "You don't have the needed permission for this action!"], 423);
+        }
+
+        $acceptableContentTypes = $request->getAcceptableContentTypes();
+
+        if(empty($request->getContent())) {
+            return new JsonResponse(["msg" => "HTTP body is empty"], 400);
+        } else if(count($acceptableContentTypes)>1 || $acceptableContentTypes[0] != "application/json") {
+            return new JsonResponse(["msg" => "application/json is the only acceptable content type!"], 406);
+        } else if(json_decode($request->getContent()) === null) {
+            return new JsonResponse(["msg" => "The content of the body should be json!"], 400);
+        }
+
+        $orderStatusChangeRequestDto = $serializer->deserialize($request->getContent(), OrderStatusChangeRequestDto::class, 'json');
+
+        $errors = $validator->validate($orderStatusChangeRequestDto);
+        if (count($errors) > 0) {
+            return ValidationErrorJsonConverter::convertValidationErrors($errors, $serializer);
+        }
+
+        return $orderService->changeOrderStatus($statusRepository, $orderRepository, $user, $orderStatusChangeRequestDto, $entityManager);
     }
 
 
