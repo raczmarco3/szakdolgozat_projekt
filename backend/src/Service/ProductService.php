@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Converter\JsonConverter;
 use App\Dto\RequestDto\ProductRequestDto;
-use App\Dto\ResponseDto\CategoryResponseDto;
+use App\Dto\ResponseDto\ProductMainPageResponseDto;
 use App\Dto\ResponseDto\ProductResponseDto;
 use App\Entity\Image;
 use App\Entity\Product;
@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
+use App\Repository\RateRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -128,6 +129,39 @@ class ProductService
         }
 
         return new JsonResponse(["msg" => "Product updated!"], 200);
+    }
+
+    public function mainPageShowProducts(SerializerInterface $serializer, ProductRepository $productRepository,
+                                         ImageRepository $imageRepository, RateRepository $rateRepository,
+                                         RateService $rateService): JsonResponse
+    {
+        $products = $productRepository->findAll();
+
+        if(empty($products)) {
+            return new JsonResponse(["msg" => "There are no products yet!"], 404);
+        }
+
+        $productMainPageResponseDtoArray = [];
+
+        foreach($products as $product)
+        {
+            if($product->getDeleted() == 0) {
+                $productMainPageResponseDto = new ProductMainPageResponseDto();
+                $productMainPageResponseDto->setId($product->getId());
+                $productMainPageResponseDto->setName($product->getName());
+                $productMainPageResponseDto->setPrice($product->getPrice());
+                $productMainPageResponseDto->setCategory($product->getCategory()->getName());
+
+                $imgData = $imageRepository->findOneBy(["product" => $product]);
+                $productMainPageResponseDto->setImageData($imgData->getImage());
+
+                $rate = $rateService->getProductRate($rateRepository, $productRepository, $product->getId());
+                $productMainPageResponseDto->setRate($rate->getRating());
+
+                $productMainPageResponseDtoArray[] = $productMainPageResponseDto;
+            }
+        }
+        return JsonConverter::jsonResponseConverter($serializer, $productMainPageResponseDtoArray);
     }
 
     private function setProduct(Product $product, ProductRequestDto $productRequestDto): Product

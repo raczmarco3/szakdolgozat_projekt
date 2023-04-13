@@ -1,1 +1,13 @@
-<p>main-page works!</p>
+<h1 class="mainpageh1">Termékek</h1>
+
+<div class="products">
+  <p class="table-msg" *ngIf="errorMsg">{{errorMsg}}</p>
+  <p class="table-msg" *ngIf="errorStatus == 0">Server Down!</p>
+  <div class="product" *ngFor="let product of data">
+    <img src="{{product.imageData}}" alt="Product Image"/>
+    <a class="productlink" href="#">{{product.name}}</a>
+    <b>Rating: {{product.rate}}</b>
+    <div>{{product.price}} Ft</div>
+    <a class="addtocartbutton" href="#">Kosárba</a>
+  </div>
+</div>

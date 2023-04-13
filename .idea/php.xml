@@ -73,6 +73,7 @@
       <path value="$PROJECT_DIR$/backend/vendor/symfony/validator" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/translation-contracts" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/serializer" />
+      <path value="$PROJECT_DIR$/backend/vendor/nelmio/cors-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

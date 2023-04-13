@@ -48,8 +48,7 @@ class RateService
         return new JsonResponse(["msg" => "Thank you for your feedback!"], 200);
     }
 
-    public function getProductRate(RateRepository $rateRepository, SerializerInterface $serializer,
-                                   ProductRepository $productRepository, int $id): JsonResponse
+    public function getProductRate(RateRepository $rateRepository, ProductRepository $productRepository, int $id)
     {
         $product = $productRepository->find($id);
         if(!$product) {
@@ -66,12 +65,14 @@ class RateService
             $count++;
         }
 
-        $rating = $rating / $count;
+        if($rating > 0) {
+            $rating = $rating / $count;
+        }
 
         $rateResponseDto = new RateResponseDto();
         $rateResponseDto->setRating($rating);
         $rateResponseDto->setProductId($product->getId());
 
-        return JsonConverter::jsonResponseConverter($serializer, $rateResponseDto);
+        return $rateResponseDto;
     }
 }

@@ -8,7 +8,9 @@ use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\ImageRepository;
 use App\Repository\ProductRepository;
+use App\Repository\RateRepository;
 use App\Service\ProductService;
+use App\Service\RateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -126,6 +128,16 @@ class ProductController extends AbstractController
         }
 
         return $productService->editProduct($id, $productRepository, $categoryRepository, $productRequestDto, $entityManager, $imgData, $imageRepository, $user);
+    }
+
+    /**
+     * @Route("/get/all", methods={"GET"})
+     */
+    public function mainPageShowProducts(SerializerInterface $serializer, ProductRepository $productRepository,
+                                     ProductService $productService, ImageRepository $imageRepository,
+                                         RateRepository $rateRepository, RateService $rateService): JsonResponse
+    {
+        return $productService->mainPageShowProducts($serializer, $productRepository, $imageRepository, $rateRepository, $rateService);
     }
 }
 
