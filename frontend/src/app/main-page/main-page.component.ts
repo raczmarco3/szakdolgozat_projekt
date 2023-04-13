@@ -11,6 +11,8 @@ export class MainPageComponent {
   data: Product[] = [];
   errorMsg: any;
   errorStatus: number;
+  pagination: number = 1;
+  allProducts: number;
 
   constructor(private mainPageService: MainPageService) { }
 
@@ -19,10 +21,12 @@ export class MainPageComponent {
   }
 
   getData() {
-    this.mainPageService.mainPageShowProducts().subscribe(
+    this.mainPageService.mainPageShowProducts(this.pagination).subscribe(
       {
         next: (response) => {
-          this.data = response;
+          this.data = response.products;
+          this.allProducts = response.totalProducts;
+          console.log(this.allProducts);
           this.errorMsg = undefined;
         },
         error: (msg) => {
@@ -32,6 +36,11 @@ export class MainPageComponent {
         }
       }
     );
+  }
+
+  renderPage(event: number) {
+    this.pagination = event;
+    this.getData();
   }
 
 }

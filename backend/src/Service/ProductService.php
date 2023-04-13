@@ -15,6 +15,8 @@ use App\Repository\ProductRepository;
 use App\Repository\RateRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -131,11 +133,23 @@ class ProductService
         return new JsonResponse(["msg" => "Product updated!"], 200);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function mainPageShowProducts(SerializerInterface $serializer, ProductRepository $productRepository,
-                                         ImageRepository $imageRepository, RateRepository $rateRepository,
-                                         RateService $rateService): JsonResponse
+                                         ImageRepository     $imageRepository, RateRepository $rateRepository,
+                                         RateService         $rateService, int $page): JsonResponse
     {
-        $products = $productRepository->findAll();
+        $limit = 15;
+        if($page > 1) {
+            $offset = ($page * $limit) - $limit;
+        } else {
+            $offset = 1;
+        }
+
+        $products = $productRepository->findby(["deleted" => 0],  ["createdAt" => "desc"], $limit, $offset);
+        $count = $productRepository->getCount();
 
         if(empty($products)) {
             return new JsonResponse(["msg" => "There are no products yet!"], 404);
@@ -161,7 +175,11 @@ class ProductService
                 $productMainPageResponseDtoArray[] = $productMainPageResponseDto;
             }
         }
-        return JsonConverter::jsonResponseConverter($serializer, $productMainPageResponseDtoArray);
+        $returnedArray = [
+            "products" => $productMainPageResponseDtoArray,
+            "totalProducts" => $count
+        ];
+        return JsonConverter::jsonResponseConverter($serializer, $returnedArray);
     }
 
     private function setProduct(Product $product, ProductRequestDto $productRequestDto): Product

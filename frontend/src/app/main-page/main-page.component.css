@@ -40,3 +40,6 @@
 .addtocartbutton:hover {
   color: grey;
 }
+.mainPagePagination {
+  text-align: center;
+}

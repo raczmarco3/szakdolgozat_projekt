@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Product} from "../model/product";
+import {ProductPagination} from "../model/product-pagination";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class MainPageService
 
   constructor(private http: HttpClient) { }
 
-  mainPageShowProducts() {
-    return this.http.get<Product[]>(`${this.baseUrl}` + 'product/get/all');
+  mainPageShowProducts(page: number) {
+    return this.http.get<ProductPagination>(`${this.baseUrl}` + 'product/page/' +page);
   }
 }

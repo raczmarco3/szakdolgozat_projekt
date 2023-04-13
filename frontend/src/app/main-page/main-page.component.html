@@ -3,7 +3,8 @@
 <div class="products">
   <p class="table-msg" *ngIf="errorMsg">{{errorMsg}}</p>
   <p class="table-msg" *ngIf="errorStatus == 0">Server Down!</p>
-  <div class="product" *ngFor="let product of data">
+  <div class="product" *ngFor="let product of data | paginate: { itemsPerPage: 15, currentPage: pagination,
+                  totalItems: allProducts }">
     <img src="{{product.imageData}}" alt="Product Image"/>
     <a class="productlink" href="#">{{product.name}}</a>
     <b>Rating: {{product.rate}}</b>
@@ -11,3 +12,9 @@
     <a class="addtocartbutton" href="#">Kosárba</a>
   </div>
 </div>
+<div class="mainPagePagination">
+  <pagination-controls
+    (pageChange)="renderPage($event)"
+  ></pagination-controls>
+</div>
+
