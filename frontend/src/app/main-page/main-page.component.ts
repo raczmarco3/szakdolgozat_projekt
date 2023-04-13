@@ -26,7 +26,6 @@ export class MainPageComponent {
         next: (response) => {
           this.data = response.products;
           this.allProducts = response.totalProducts;
-          console.log(this.allProducts);
           this.errorMsg = undefined;
         },
         error: (msg) => {
