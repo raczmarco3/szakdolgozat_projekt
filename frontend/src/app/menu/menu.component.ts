@@ -9,10 +9,23 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class MenuComponent {
 
+  registerOpened: boolean = false;
   constructor(public dialog: MatDialog) { }
-  register() {
-    const dialogRef = this.dialog.open(RegistrationComponent, {height: '350px', width: '600px'});
+  register(opened: boolean) {
+    if(!this.registerOpened) {
+      this.registerOpened = true;
 
+      const dialogRef = this.dialog.open(RegistrationComponent,
+        {height: '270px', width: '600px'});
+      dialogRef.afterClosed().subscribe(
+        {
+          next: () =>
+          {
+            this.registerOpened = false;
+          }
+        }
+      );
+    }
   }
 
 }

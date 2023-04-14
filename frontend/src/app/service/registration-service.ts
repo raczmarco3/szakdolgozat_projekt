@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,8 @@ export class RegistrationService
 
   register(jsonContent: JSON)
   {
-    return this.http.post(`${this.baseUrl}`+'register', jsonContent);
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/json');
+    return this.http.post(`${this.baseUrl}`+'register', jsonContent, {headers: headers});
   }
 }

@@ -20,3 +20,6 @@
 .mth {
   cursor: pointer;
 }
+::ng-deep .cdk-overlay-pane {
+  margin: 0 auto;
+}
