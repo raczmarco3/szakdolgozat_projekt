@@ -1,0 +1,45 @@
+input[type=password], input[type=text] {
+  width: -webkit-fill-available;
+  width: fill-available;
+  width: -moz-available;
+  padding: 8px;
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+.close_button button {
+  padding: 8px;
+  cursor: pointer;
+  float: left;
+  margin-top: 15px;
+}
+.mdc-dialog__content {
+  overflow: unset;
+}
+.close-link {
+  position: absolute;
+  top: 6px;
+  right: 15px;
+  cursor: pointer;
+  color: gray;
+  font-size: x-large;
+}
+.close-link:hover {
+  color: black;
+}
+label {
+  color: black;
+  font-weight: 600;
+}
+.login_button button {
+  border:none;
+  padding: 10px;
+  background-color: cornflowerblue;
+  color: white;
+  cursor: pointer;
+  float: right;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+.login_button:hover button {
+  background-color: #4881ea;
+}

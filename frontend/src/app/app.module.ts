@@ -10,13 +10,15 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { RegistrationComponent } from './registration/registration.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from '@angular/material/dialog';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
     MenuComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
