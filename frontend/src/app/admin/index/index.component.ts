@@ -20,5 +20,4 @@ export class IndexComponent {
       this.isAdmin = true;
     }
   }
-
 }

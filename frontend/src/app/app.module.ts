@@ -16,6 +16,9 @@ import { AdminMenuComponent } from './admin/admin-menu/admin-menu.component';
 import { ListCategoryComponent } from './admin/category/list-category/list-category.component';
 import { AddCategoryComponent } from './admin/category/add-category/add-category.component';
 import { EditCategoryComponent } from './admin/category/edit-category/edit-category.component';
+import { MatTableModule } from '@angular/material/table';
+import {MatSortModule} from "@angular/material/sort";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -37,6 +40,9 @@ import { EditCategoryComponent } from './admin/category/edit-category/edit-categ
     NgxPaginationModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
