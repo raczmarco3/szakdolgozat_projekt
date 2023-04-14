@@ -17,7 +17,10 @@ class ApiLoginController extends AbstractController
             return new JsonResponse(["msg" => "Missing credentials!"], 401);
         }
 
-        return new JsonResponse(["msg" => "Bejelentkezés sikeres!"], 200);
+        return new JsonResponse([
+            "username" => $user->getUsername(),
+            "role" => $user->getRoles()[0],
+        ], 200);
     }
 
     #[Route('/api/logout', name: 'app_logout', methods: ['GET'])]

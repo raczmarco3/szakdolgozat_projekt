@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {RegistrationComponent} from "../registration/registration.component";
 import {MatDialog} from '@angular/material/dialog';
 import {LoginComponent} from "../login/login.component";
+import {LoginService} from "../service/login-service";
+import {UserService} from "../service/user-service";
 
 @Component({
   selector: 'app-menu',
@@ -14,7 +16,16 @@ export class MenuComponent {
   loginOpened: boolean = false;
   registerDialog: any;
   loginDialog: any;
-  constructor(public dialog: MatDialog) { }
+  loggedIn: boolean = false;
+
+  constructor(public dialog: MatDialog, private loginService: LoginService, private userService: UserService) { }
+
+  ngOnInit() {
+    if(this.loginService.getData("loggedIn") == "true") {
+      this.loggedIn = true;
+    }
+    console.log(this.loggedIn);
+  }
   register(opened: boolean) {
     if(this.loginOpened) {
       this.loginDialog.close();
@@ -54,6 +65,17 @@ export class MenuComponent {
         }
       );
     }
+  }
+  logout() {
+    this.userService.logout().subscribe(
+      {
+        next: (response) => {
+          this.loginService.removeData("username");
+          this.loginService.removeData("role");
+          this.loginService.removeData("loggedIn");
+          window.location.reload();
+        }
+      });
   }
 
 }

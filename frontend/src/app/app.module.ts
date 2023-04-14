@@ -26,7 +26,7 @@ import { LoginComponent } from './login/login.component';
     HttpClientModule,
     NgxPaginationModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

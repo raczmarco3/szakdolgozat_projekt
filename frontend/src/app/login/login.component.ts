@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
 import {FormControl, FormGroup} from "@angular/forms";
 import {UserService} from "../service/user-service";
+import {LoginService} from "../service/login-service";
+import {Router} from "@angular/router"
 
 @Component({
   selector: 'app-login',
@@ -13,7 +15,8 @@ export class LoginComponent {
   msg: string;
   obj: any;
 
-  constructor(public dialogRef: MatDialogRef<LoginComponent>, public userService: UserService) {}
+  constructor(public dialogRef: MatDialogRef<LoginComponent>, public userService: UserService,
+              private loginService: LoginService, private router: Router) {}
 
   loginForm = new FormGroup({
     username: new FormControl(),
@@ -31,15 +34,17 @@ export class LoginComponent {
 
       this.userService.login(this.jsonContent).subscribe(
         {
-          next: () => {
-            this.dialogRef.close();
+          next: (response) => {
+            this.loginService.saveData("username", response.username);
+            this.loginService.saveData("role", response.role);
+            this.loginService.saveData("loggedIn", 'true');
+            window.location.reload();
           },
           error: (msg) => {
             this.msg = msg.error.msg;
           }
         }
       );
-
     }
   }
 

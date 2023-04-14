@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {User} from "../model/user";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,12 @@ export class UserService
   {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/json');
-    return this.http.post(`${this.baseUrl}`+'login', jsonContent, {headers: headers});
+    return this.http.post<User>(`${this.baseUrl}`+'login', jsonContent, {headers: headers});
+  }
+
+  logout() {
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/json');
+    return this.http.get(`${this.baseUrl}`+'logout', {headers: headers});
   }
 }
