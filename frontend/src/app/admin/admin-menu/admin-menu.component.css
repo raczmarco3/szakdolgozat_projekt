@@ -1,0 +1,16 @@
+.adminMenu {
+  width: 150px;
+  background-color: lightgrey;
+  float: left;
+  margin-right: 15px;
+}
+.adminMenu a {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+}
+.adminMenu a:hover {
+  background-color: grey;
+}

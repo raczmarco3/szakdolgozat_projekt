@@ -17,6 +17,7 @@ export class MenuComponent {
   registerDialog: any;
   loginDialog: any;
   loggedIn: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(public dialog: MatDialog, private loginService: LoginService, private userService: UserService) { }
 
@@ -24,7 +25,10 @@ export class MenuComponent {
     if(this.loginService.getData("loggedIn") == "true") {
       this.loggedIn = true;
     }
-    console.log(this.loggedIn);
+
+    if(this.loginService.getData("role") == "ROLE_ADMIN") {
+      this.isAdmin = true;
+    }
   }
   register(opened: boolean) {
     if(this.loginOpened) {

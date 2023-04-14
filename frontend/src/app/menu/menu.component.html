@@ -3,5 +3,6 @@
   <a href="#news">Kategóriák</a>
   <a class="mth" *ngIf="!loggedIn" (click)="login(true)">Bejelentkezés</a>
   <a class="mth" *ngIf="!loggedIn" (click)="register(true)">Regisztráció</a>
+  <a href="/admin" *ngIf="isAdmin">Admin</a>
   <a class="mth" *ngIf="loggedIn" (click)="logout()">Kijelentkezés</a>
 </div>
