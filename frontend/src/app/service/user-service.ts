@@ -15,7 +15,7 @@ export class UserService
   {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/json');
-    return this.http.post<User>(`${this.baseUrl}`+'login', jsonContent, {headers: headers});
+    return this.http.post<User>(`${this.baseUrl}`+'login', jsonContent, {headers: headers, withCredentials: true});
   }
 
   logout() {

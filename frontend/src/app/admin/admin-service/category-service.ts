@@ -20,7 +20,7 @@ export class CategoryService
   {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/json');
-    return this.http.post(`${this.baseUrl}`+'add', jsonContent, {headers: headers});
+    return this.http.post(`${this.baseUrl}`+'add', jsonContent, {headers: headers, withCredentials: true});
   }
 
   deleteCategory(id: number)

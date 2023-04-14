@@ -77,7 +77,7 @@ export class MenuComponent {
           this.loginService.removeData("username");
           this.loginService.removeData("role");
           this.loginService.removeData("loggedIn");
-          window.open("/");
+          window.location.href = "/";
         }
       });
   }
