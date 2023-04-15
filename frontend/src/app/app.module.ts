@@ -19,6 +19,9 @@ import { EditCategoryComponent } from './admin/category/edit-category/edit-categ
 import { MatTableModule } from '@angular/material/table';
 import {MatSortModule} from "@angular/material/sort";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { ListMethodComponent } from './admin/method/list-method/list-method.component';
+import { AddMethodComponent } from './admin/method/add-method/add-method.component';
+import { EditMethodComponent } from './admin/method/edit-method/edit-method.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     AdminMenuComponent,
     ListCategoryComponent,
     AddCategoryComponent,
-    EditCategoryComponent
+    EditCategoryComponent,
+    ListMethodComponent,
+    AddMethodComponent,
+    EditMethodComponent
   ],
   imports: [
     BrowserModule,

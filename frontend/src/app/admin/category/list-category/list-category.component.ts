@@ -45,7 +45,6 @@ export class ListCategoryComponent {
     if(this.loginService.getData("role") == "ROLE_ADMIN") {
       this.isAdmin = true;
     }
-
     this.getData();
   }
   getData() {

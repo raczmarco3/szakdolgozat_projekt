@@ -8,6 +8,7 @@ use App\Dto\ResponseDto\MethodResponseDto;
 use App\Entity\Method;
 use App\Entity\User;
 use App\Repository\MethodRepository;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -51,11 +52,16 @@ class MethodService
         return JsonConverter::jsonResponseConverter($serializer, $methodResponseDtoArray);
     }
 
-    public function deleteMethod(int $id, MethodRepository $methodRepository): JsonResponse
+    public function deleteMethod(int $id, MethodRepository $methodRepository, OrderRepository $orderRepository): JsonResponse
     {
         $method = $methodRepository->find($id);
         if(!$method) {
             return new JsonResponse(["meg" => "Payment method not found!"], 404);
+        }
+
+        $order = $orderRepository->findOneBy(["method" => $method]);
+        if($order) {
+            return new JsonResponse(["msg" => "This method is still in use."], 403);
         }
 
         $methodRepository->remove($method, true);
