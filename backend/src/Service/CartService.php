@@ -52,7 +52,7 @@ class CartService
                 $productResponseDto->setId($product->getId());
                 $productResponseDto->setName($product->getName());
                 $productResponseDto->setPrice($product->getPrice());
-                $productResponseDto->setCategory($product->getCategory()->getName());
+                $productResponseDto->setCategoryName($product->getCategory()->getName());
                 $productResponseDto->setUpdatedAt($product->getUpdatedAt());
                 $productResponseDto->setCreatedAt($product->getCreatedAt());
 

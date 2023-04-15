@@ -101,7 +101,7 @@ class OrderService
                     $productResponseDto->setId($product->getId());
                     $productResponseDto->setPrice($product->getPrice());
                     $productResponseDto->setName($product->getName());
-                    $productResponseDto->setCategory($product->getCategory()->getName());
+                    $productResponseDto->setCategoryName($product->getCategory()->getName());
                     $productResponseDto->setUpdatedAt($product->getUpdatedAt());
                     $productResponseDto->setCreatedAt($product->getCreatedAt());
 

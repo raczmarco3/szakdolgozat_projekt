@@ -10,6 +10,7 @@
 
     <label for="category">Kategória</label>
     <select name="category" formControlName="category" id="category" required>
+      <option>Válassz kategóriát</option>
       <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
       <option *ngIf="categories.length == 0">No category available! First add a Category!</option>
     </select>

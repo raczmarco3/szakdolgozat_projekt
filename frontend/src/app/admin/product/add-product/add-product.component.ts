@@ -54,8 +54,10 @@ export class AddProductComponent {
         "categoryId": this.addProductForm.get('category')?.value,
         "imgData": this.base64code,
       };
+      console.log(this.addProductForm);
 
       this.jsonContent = <JSON>this.obj;
+      console.log(this.jsonContent);
 
       this.productService.addProduct(this.jsonContent).subscribe(
         {

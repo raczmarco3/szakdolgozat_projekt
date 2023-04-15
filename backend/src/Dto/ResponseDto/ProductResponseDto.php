@@ -7,7 +7,7 @@ class ProductResponseDto
     private int $id;
     private string $name;
     private int $price;
-    private string $category;
+    private string $categoryName;
     private ?\DateTimeImmutable $createdAt;
     private ?\DateTimeImmutable $updatedAt;
     private $imageData;
@@ -63,17 +63,17 @@ class ProductResponseDto
     /**
      * @return string
      */
-    public function getCategory(): string
+    public function getCategoryName(): string
     {
-        return $this->category;
+        return $this->categoryName;
     }
 
     /**
-     * @param string $category
+     * @param string $categoryName
      */
-    public function setCategory(string $category): void
+    public function setCategoryName(string $categoryName): void
     {
-        $this->category = $category;
+        $this->categoryName = $categoryName;
     }
 
     /**

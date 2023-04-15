@@ -55,9 +55,10 @@ class ProductService
         return new JsonResponse(["msg" => "Product created!"], 201);
     }
 
-    public function getProducts(SerializerInterface $serializer, ProductRepository $productRepository, ImageRepository $imageRepository): JsonResponse
+    public function getProducts(SerializerInterface $serializer, ProductRepository $productRepository,
+                                ImageRepository $imageRepository): JsonResponse
     {
-        $products = $productRepository->findAll();
+        $products = $productRepository->findBy(["deleted" => 0]);
 
         if(empty($products)) {
             return new JsonResponse(["msg" => "There are no products yet!"], 404);
@@ -67,26 +68,25 @@ class ProductService
 
         foreach($products as $product)
         {
-            if($product->getDeleted() == 0) {
-                $productResponseDto = new ProductResponseDto();
-                $productResponseDto->setId($product->getId());
-                $productResponseDto->setName($product->getName());
-                $productResponseDto->setPrice($product->getPrice());
-                $productResponseDto->setCategory($product->getCategory()->getName());
-                $productResponseDto->setCreatedAt($product->getCreatedAt());
-                $productResponseDto->setUpdatedAt($product->getUpdatedAt());
-                $image = $imageRepository->findOneBy(["product" => $product]);
-                if($image) {
-                    $productResponseDto->setImageData($image->getImage());
-                }
+            $productResponseDto = new ProductResponseDto();
+            $productResponseDto->setId($product->getId());
+            $productResponseDto->setName($product->getName());
+            $productResponseDto->setPrice($product->getPrice());
+            $productResponseDto->setCategoryName($product->getCategory()->getName());
+            $productResponseDto->setCreatedAt($product->getCreatedAt());
+            $productResponseDto->setUpdatedAt($product->getUpdatedAt());
 
-                $productResponseDtoArray[] = $productResponseDto;
+            $image = $imageRepository->findOneBy(["product" => $product]);
+            if($image) {
+                $productResponseDto->setImageData($image->getImage());
             }
+
+            $productResponseDtoArray[] = $productResponseDto;
         }
         return JsonConverter::jsonResponseConverter($serializer, $productResponseDtoArray);
     }
 
-    public function deleteProduct($id, ProductRepository $productRepository): JsonResponse
+    public function deleteProduct($id, ProductRepository $productRepository, EntityManagerInterface $entityManager): JsonResponse
     {
         $product = $productRepository->find($id);
 
@@ -94,7 +94,9 @@ class ProductService
             return new JsonResponse(["msg" => "Product not found!"], 404);
         }
 
-        $productRepository->remove($product, true);
+        $product->setDeleted(1);
+        $entityManager->flush();
+
         return new JsonResponse(["msg" => "Product deleted!"], 200);
     }
 
@@ -145,7 +147,7 @@ class ProductService
         if($page > 1) {
             $offset = ($page * $limit) - $limit;
         } else {
-            $offset = 1;
+            $offset = 0;
         }
 
         $products = $productRepository->findby(["deleted" => 0],  ["createdAt" => "desc"], $limit, $offset);
@@ -159,21 +161,19 @@ class ProductService
 
         foreach($products as $product)
         {
-            if($product->getDeleted() == 0) {
-                $productMainPageResponseDto = new ProductMainPageResponseDto();
-                $productMainPageResponseDto->setId($product->getId());
-                $productMainPageResponseDto->setName($product->getName());
-                $productMainPageResponseDto->setPrice($product->getPrice());
-                $productMainPageResponseDto->setCategory($product->getCategory()->getName());
+            $productMainPageResponseDto = new ProductMainPageResponseDto();
+            $productMainPageResponseDto->setId($product->getId());
+            $productMainPageResponseDto->setName($product->getName());
+            $productMainPageResponseDto->setPrice($product->getPrice());
+            $productMainPageResponseDto->setCategory($product->getCategory()->getName());
 
-                $imgData = $imageRepository->findOneBy(["product" => $product]);
-                $productMainPageResponseDto->setImageData($imgData->getImage());
+            $imgData = $imageRepository->findOneBy(["product" => $product]);
+            $productMainPageResponseDto->setImageData($imgData->getImage());
 
-                $rate = $rateService->getProductRate($rateRepository, $productRepository, $product->getId());
-                $productMainPageResponseDto->setRate($rate->getRating());
+            $rate = $rateService->getProductRate($rateRepository, $productRepository, $product->getId());
+            $productMainPageResponseDto->setRate($rate->getRating());
 
-                $productMainPageResponseDtoArray[] = $productMainPageResponseDto;
-            }
+            $productMainPageResponseDtoArray[] = $productMainPageResponseDto;
         }
         $returnedArray = [
             "products" => $productMainPageResponseDtoArray,

@@ -73,7 +73,8 @@ class ProductController extends AbstractController
     /**
      * @Route("/delete/{id}", methods={"DELETE"})
      */
-    public function deleteProduct(ProductRepository $productRepository, ProductService $productService, $id): JsonResponse
+    public function deleteProduct(ProductRepository $productRepository, ProductService $productService,
+                                  $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -84,7 +85,7 @@ class ProductController extends AbstractController
             return new JsonResponse(["msg" => "id must be a number!"], 422);
         }
 
-        return $productService->deleteProduct($id, $productRepository);
+        return $productService->deleteProduct($id, $productRepository, $entityManager);
     }
 
     /**

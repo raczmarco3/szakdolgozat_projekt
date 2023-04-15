@@ -28,6 +28,7 @@ export class ListProductComponent {
     'category',
     'createdAt',
     'updatedAt',
+    'image',
     'action'
   ];
   msg: string;

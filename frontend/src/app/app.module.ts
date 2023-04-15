@@ -27,6 +27,7 @@ import { EditStatusComponent } from './admin/status/edit-status/edit-status.comp
 import { ListProductComponent } from './admin/product/list-product/list-product.component';
 import { AddProductComponent } from './admin/product/add-product/add-product.component';
 import { EditProductComponent } from './admin/product/edit-product/edit-product.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { EditProductComponent } from './admin/product/edit-product/edit-product.
     MatDialogModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
