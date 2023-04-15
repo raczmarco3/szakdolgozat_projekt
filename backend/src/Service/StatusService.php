@@ -7,6 +7,7 @@ use App\Dto\RequestDto\StatusRequestDto;
 use App\Dto\ResponseDto\StatusResponseDto;
 use App\Entity\Status;
 use App\Entity\User;
+use App\Repository\OrderRepository;
 use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,11 +54,16 @@ class StatusService
         return JsonConverter::jsonResponseConverter($serializer, $statusResponseDtoArray);
     }
 
-    public function deleteStatus(int $id, StatusRepository $statusRepository): JsonResponse
+    public function deleteStatus(int $id, StatusRepository $statusRepository, OrderRepository $orderRepository): JsonResponse
     {
         $status = $statusRepository->find($id);
         if(!$status) {
             return new JsonResponse(["msg" => "Status not found!"], 404);
+        }
+
+        $order = $orderRepository->findOneBy(["status" => $status]);
+        if($order) {
+            return new JsonResponse(["msg" => "This status is still in use!"], 403);
         }
 
         $statusRepository->remove($status, true);

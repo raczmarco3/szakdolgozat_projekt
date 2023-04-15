@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\StatusRequestDto;
 use App\Entity\User;
+use App\Repository\OrderRepository;
 use App\Repository\StatusRepository;
 use App\Service\StatusService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -64,7 +65,7 @@ class StatusController extends AbstractController
     /**
      * @Route("/delete/{id}", methods={"DELETE"})
      */
-    public function deleteStatus($id, StatusRepository $statusRepository, StatusService $statusService): JsonResponse
+    public function deleteStatus($id, StatusRepository $statusRepository, StatusService $statusService, OrderRepository $orderRepository): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -75,7 +76,7 @@ class StatusController extends AbstractController
             return new JsonResponse(["msg" => "id must be a number!"], 422);
         }
 
-        return $statusService->deleteStatus($id, $statusRepository);
+        return $statusService->deleteStatus($id, $statusRepository, $orderRepository);
     }
 
     /**

@@ -22,6 +22,9 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import { ListMethodComponent } from './admin/method/list-method/list-method.component';
 import { AddMethodComponent } from './admin/method/add-method/add-method.component';
 import { EditMethodComponent } from './admin/method/edit-method/edit-method.component';
+import { ListStatusComponent } from './admin/status/list-status/list-status.component';
+import { AddStatusComponent } from './admin/status/add-status/add-status.component';
+import { EditStatusComponent } from './admin/status/edit-status/edit-status.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,10 @@ import { EditMethodComponent } from './admin/method/edit-method/edit-method.comp
     EditCategoryComponent,
     ListMethodComponent,
     AddMethodComponent,
-    EditMethodComponent
+    EditMethodComponent,
+    ListStatusComponent,
+    AddStatusComponent,
+    EditStatusComponent
   ],
   imports: [
     BrowserModule,

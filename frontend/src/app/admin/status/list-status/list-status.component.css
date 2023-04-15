@@ -1,0 +1,63 @@
+td, th {
+  text-align: center;
+  padding: 8px;
+}
+.table-row-design:nth-child(odd), .table-row-design:nth-child(odd):hover {
+  background-color: #f2f2f2;
+}
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+  padding: 0px;
+  margin: 0px;
+}
+.table-msg {
+  text-align: center;
+  margin: 25px;
+}
+.mat-elevation-z8 {
+  overflow: auto;
+}
+.action_button {
+  float:left;
+  margin-right: 15px;
+}
+.actions {
+  min-width: 90px;
+}
+.action_button img {
+  width: 20px;
+}
+.trash_can {
+  filter: invert(20%) sepia(96%) saturate(7166%) hue-rotate(359deg) brightness(97%) contrast(115%);
+}
+::ng-deep .mat-mdc-paginator-container {
+  min-height: 50px;
+  background-color: #f2f2f2;
+}
+.action_button button {
+  border: none;
+  cursor: pointer;
+  background: none;
+  padding: 0px;
+}
+.paginator_shadow {
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+}
+.adminContent {
+  display: flow-root;
+}
+.add_button {
+  border:none;
+  padding: 10px;
+  background-color: cornflowerblue;
+  color: white;
+  cursor: pointer;
+  float: right;
+  margin: 17px;
+}
+.add_button:hover {
+  background-color: #4881ea;
+}
+::ng-deep .cdk-overlay-pane {
+  margin-top:-250px;
+}
