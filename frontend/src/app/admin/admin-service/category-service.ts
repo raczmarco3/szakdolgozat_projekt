@@ -25,13 +25,13 @@ export class CategoryService
 
   deleteCategory(id: number)
   {
-    return this.http.delete(`${this.baseUrl}`+'delete/'+id);
+    return this.http.delete(`${this.baseUrl}`+'delete/'+id, {withCredentials: true});
   }
 
   editCategory(id: number, jsonContent: JSON)
   {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/json');
-    return this.http.put(`${this.baseUrl}`+'edit/'+id, jsonContent, {headers: headers});
+    return this.http.put(`${this.baseUrl}`+'edit/'+id, jsonContent, {headers: headers, withCredentials: true});
   }
 }

@@ -78,4 +78,21 @@ export class ListCategoryComponent {
       }
     );
   }
+
+  deleteCategory(event: any) {
+    const id = event.srcElement.attributes.id.nodeValue;
+    if(confirm("Are you sure you want to delete this?")) {
+      this.categoryService.deleteCategory(id).subscribe(
+        {
+          next: () =>
+          {
+            this.getData()
+          },
+          error: (msg) => {
+            this.msg = msg.error.msg;
+          }
+        }
+      )
+    }
+  }
 }

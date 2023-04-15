@@ -23,7 +23,7 @@
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td class="actions" mat-cell *matCellDef="let element">
             <div class="action_button">
-              <button>
+              <button (click)="deleteCategory($event)">
                 <img src="assets/trash-can-icon.png" class="trash_can" id="{{element.id}}">
               </button>
             </div>
