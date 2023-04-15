@@ -8,6 +8,7 @@ import {CategoryService} from "../../admin-service/category-service";
 import {RegistrationComponent} from "../../../registration/registration.component";
 import {MatDialog} from "@angular/material/dialog";
 import {AddCategoryComponent} from "../add-category/add-category.component";
+import {EditCategoryComponent} from "../edit-category/edit-category.component";
 
 @Component({
   selector: 'app-list-category',
@@ -47,7 +48,6 @@ export class ListCategoryComponent {
 
     this.getData();
   }
-
   getData() {
     this.categoryService.getCategories().subscribe(
       {
@@ -65,7 +65,6 @@ export class ListCategoryComponent {
       }
     );
   }
-
   addCategory() {
     const dialogRef = this.dialog.open(AddCategoryComponent,
       {height: '200px', width: '600px'}, );
@@ -78,7 +77,6 @@ export class ListCategoryComponent {
       }
     );
   }
-
   deleteCategory(event: any) {
     const id = event.srcElement.attributes.id.nodeValue;
     if(confirm("Are you sure you want to delete this?")) {
@@ -94,5 +92,19 @@ export class ListCategoryComponent {
         }
       )
     }
+  }
+  editCategory(event: any) {
+    const id = event.srcElement.attributes.id.nodeValue;
+    const editedData = this.data.find(data => data.id == id);
+    const dialogRef = this.dialog.open(EditCategoryComponent,
+      {height: '200px', width: '600px', data: editedData}, );
+    dialogRef.afterClosed().subscribe(
+      {
+        next: () =>
+        {
+          this.getData();
+        }
+      }
+    );
   }
 }
