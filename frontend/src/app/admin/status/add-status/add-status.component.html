@@ -1,1 +1,17 @@
-<p>add-status works!</p>
+<div mat-dialog-content>
+  <h1 class="pageMain">Fizetési lehetőség hozzáadása</h1>
+
+  <form ngNativeValidate [formGroup]="addStatusForm" (ngSubmit)="onSubmit($event)">
+    <label for="name">Név:</label>
+    <input type="text" name="name" formControlName="name" id="name" maxlength="255" required>
+
+    <div class="add_button">
+      <button type="submit" name="add">Hozzáadás</button>
+    </div>
+  </form>
+
+  <div class="show_msg">
+    <p *ngIf="msg">{{msg}}</p>
+  </div>
+</div>
+<a class="close-link" (click)="onClose()">×</a>
