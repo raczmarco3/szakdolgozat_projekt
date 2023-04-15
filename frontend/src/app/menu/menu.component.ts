@@ -59,7 +59,12 @@ export class MenuComponent {
       this.loginOpened = true;
 
       this.loginDialog = this.dialog.open(LoginComponent,
-        {height: '270px', width: '600px'});
+        {
+          height: '270px',
+          width: '600px',
+          position: { right: '115px', top: '0px' },
+          hasBackdrop: true,
+        });
       this.loginDialog.afterClosed().subscribe(
         {
           next: () =>
