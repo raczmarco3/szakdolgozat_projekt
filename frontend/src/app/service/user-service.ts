@@ -21,6 +21,6 @@ export class UserService
   logout() {
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/json');
-    return this.http.get(`${this.baseUrl}`+'logout', {headers: headers});
+    return this.http.get(`${this.baseUrl}`+'logout', {headers: headers, withCredentials: true});
   }
 }
