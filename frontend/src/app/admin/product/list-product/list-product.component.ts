@@ -87,7 +87,7 @@ export class ListProductComponent {
   }
   addProduct() {
     const dialogRef = this.dialog.open(AddProductComponent,
-      {height: '200px', width: '600px'}, );
+      {height: '400px', width: '600px'}, );
     dialogRef.afterClosed().subscribe(
       {
         next: () =>
@@ -102,7 +102,7 @@ export class ListProductComponent {
     const id = event.srcElement.attributes.id.nodeValue;
     const editedData = this.data.find(data => data.id == id);
     const dialogRef = this.dialog.open(EditProductComponent,
-      {height: '200px', width: '600px', data: editedData}, );
+      {height: '400px', width: '600px', data: editedData}, );
     dialogRef.afterClosed().subscribe(
       {
         next: () =>
