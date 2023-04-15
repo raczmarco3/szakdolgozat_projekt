@@ -71,6 +71,7 @@ export class ListCategoryComponent {
       {
         next: () =>
         {
+          this.msg = "";
           this.getData();
         }
       }

@@ -6,6 +6,10 @@ import {LoginService} from "../../../service/login-service";
 import {MatDialog} from "@angular/material/dialog";
 import {Method} from "../../admin-model/method";
 import {MethodService} from "../../admin-service/method-service";
+import {AddCategoryComponent} from "../../category/add-category/add-category.component";
+import {AddMethodComponent} from "../add-method/add-method.component";
+import {EditCategoryComponent} from "../../category/edit-category/edit-category.component";
+import {EditMethodComponent} from "../edit-method/edit-method.component";
 
 @Component({
   selector: 'app-list-method',
@@ -62,5 +66,47 @@ export class ListMethodComponent {
       }
     );
   }
-
+  deleteMethod(event: any) {
+    const id = event.srcElement.attributes.id.nodeValue;
+    if(confirm("Are you sure you want to delete this?")) {
+      this.methodService.deleteMethod(id).subscribe(
+        {
+          next: () =>
+          {
+            this.getData()
+          },
+          error: (msg) => {
+            this.msg = msg.error.msg;
+          }
+        }
+      );
+    }
+  }
+  addMethod() {
+    const dialogRef = this.dialog.open(AddMethodComponent,
+      {height: '200px', width: '600px'}, );
+    dialogRef.afterClosed().subscribe(
+      {
+        next: () =>
+        {
+          this.msg = "";
+          this.getData();
+        }
+      }
+    );
+  }
+  editMethod(event: any) {
+    const id = event.srcElement.attributes.id.nodeValue;
+    const editedData = this.data.find(data => data.id == id);
+    const dialogRef = this.dialog.open(EditMethodComponent,
+      {height: '200px', width: '600px', data: editedData}, );
+    dialogRef.afterClosed().subscribe(
+      {
+        next: () =>
+        {
+          this.getData();
+        }
+      }
+    );
+  }
 }

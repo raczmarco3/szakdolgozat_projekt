@@ -28,12 +28,12 @@
           <th mat-header-cell *matHeaderCellDef>  </th>
           <td class="actions" mat-cell *matCellDef="let element">
             <div class="action_button">
-              <button>
+              <button (click)="deleteMethod($event)">
                 <img src="assets/trash-can-icon.png" class="trash_can" id="{{element.id}}">
               </button>
             </div>
             <div class="action_button">
-              <button>
+              <button (click)="editMethod($event)">
                 <img src="assets/file-edit-icon.png" id="{{element.id}}">
               </button>
             </div>
@@ -47,6 +47,6 @@
       <p class="table-msg" *ngIf="msg">{{msg}}</p>
     </div>
     <mat-paginator class="paginator_shadow" #paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
-    <button class="add_button">Fizetési lehetőség hozzáadása</button>
+    <button class="add_button" (click)="addMethod()">Fizetési lehetőség hozzáadása</button>
   </div>
 </div>
