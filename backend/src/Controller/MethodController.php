@@ -6,6 +6,7 @@ use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\MethodRequestDto;
 use App\Entity\User;
 use App\Repository\MethodRepository;
+use App\Repository\OrderRepository;
 use App\Service\MethodService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -64,7 +65,7 @@ class MethodController extends AbstractController
     /**
      * @Route("/delete/{id}", methods={"DELETE"})
      */
-    public function deleteMethod($id, MethodRepository $methodRepository, MethodService $methodService): JsonResponse
+    public function deleteMethod($id, MethodRepository $methodRepository, MethodService $methodService, OrderRepository $orderRepository): JsonResponse
     {
         $hasAccess = $this->isGranted('ROLE_ADMIN');
         if(!$hasAccess) {
@@ -75,7 +76,7 @@ class MethodController extends AbstractController
             return new JsonResponse(["msg" => "id must be a number!"], 422);
         }
 
-        return $methodService->deleteMethod($id, $methodRepository);
+        return $methodService->deleteMethod($id, $methodRepository, $orderRepository);
     }
 
     /**
