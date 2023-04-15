@@ -28,6 +28,10 @@ export class ListMethodComponent {
     'action'
   ];
   msg: string;
+  addDialog: any;
+  editDialog: any;
+  editOpened: boolean = false;
+  addOpened: boolean = false;
 
   @ViewChild(MatSort, { static: false })
   set sort(v: MatSort) {
@@ -83,30 +87,42 @@ export class ListMethodComponent {
     }
   }
   addMethod() {
-    const dialogRef = this.dialog.open(AddMethodComponent,
-      {height: '200px', width: '600px'}, );
-    dialogRef.afterClosed().subscribe(
-      {
-        next: () =>
+    if(this.editOpened) {
+      this.editDialog.close();
+    }
+    if(!this.addOpened) {
+      this.addOpened = true;
+      this.addDialog = this.dialog.open(AddMethodComponent,
+        {height: '200px', width: '600px'},);
+      this.addDialog.afterClosed().subscribe(
         {
-          this.msg = "";
-          this.getData();
+          next: () => {
+            this.msg = "";
+            this.getData();
+            this.addOpened = false;
+          }
         }
-      }
-    );
+      );
+    }
   }
   editMethod(event: any) {
-    const id = event.srcElement.attributes.id.nodeValue;
-    const editedData = this.data.find(data => data.id == id);
-    const dialogRef = this.dialog.open(EditMethodComponent,
-      {height: '200px', width: '600px', data: editedData}, );
-    dialogRef.afterClosed().subscribe(
-      {
-        next: () =>
+    if(this.addOpened) {
+      this.addDialog.close();
+    }
+    if(!this.editOpened) {
+      this.editOpened = true;
+      const id = event.srcElement.attributes.id.nodeValue;
+      const editedData = this.data.find(data => data.id == id);
+      this.editDialog = this.dialog.open(EditMethodComponent,
+        {height: '200px', width: '600px', data: editedData},);
+      this.editDialog.afterClosed().subscribe(
         {
-          this.getData();
+          next: () => {
+            this.getData();
+            this.editOpened = false;
+          }
         }
-      }
-    );
+      );
+    }
   }
 }

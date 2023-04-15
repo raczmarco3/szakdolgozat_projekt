@@ -5,8 +5,6 @@ import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {LoginService} from "../../../service/login-service";
 import {MatDialog} from "@angular/material/dialog";
-import {AddMethodComponent} from "../../method/add-method/add-method.component";
-import {EditMethodComponent} from "../../method/edit-method/edit-method.component";
 import {ProductService} from "../../admin-service/product-service";
 import {AddProductComponent} from "../add-product/add-product.component";
 import {EditProductComponent} from "../edit-product/edit-product.component";
@@ -32,6 +30,10 @@ export class ListProductComponent {
     'action'
   ];
   msg: string;
+  addDialog: any;
+  editDialog: any;
+  editOpened: boolean = false;
+  addOpened: boolean = false;
 
   @ViewChild(MatSort, { static: false })
   set sort(v: MatSort) {
@@ -87,30 +89,42 @@ export class ListProductComponent {
     }
   }
   addProduct() {
-    const dialogRef = this.dialog.open(AddProductComponent,
-      {height: '400px', width: '600px'}, );
-    dialogRef.afterClosed().subscribe(
-      {
-        next: () =>
+    if(this.editOpened) {
+      this.editDialog.close();
+    }
+    if(!this.addOpened) {
+      this.addOpened = true;
+      this.addDialog = this.dialog.open(AddProductComponent,
+        {height: '400px', width: '600px'},);
+      this.addDialog.afterClosed().subscribe(
         {
-          this.msg = "";
-          this.getData();
+          next: () => {
+            this.msg = "";
+            this.getData();
+            this.addOpened = false;
+          }
         }
-      }
-    );
+      );
+    }
   }
   editProduct(event: any) {
-    const id = event.srcElement.attributes.id.nodeValue;
-    const editedData = this.data.find(data => data.id == id);
-    const dialogRef = this.dialog.open(EditProductComponent,
-      {height: '400px', width: '600px', data: editedData}, );
-    dialogRef.afterClosed().subscribe(
-      {
-        next: () =>
+    if(this.addOpened) {
+      this.addDialog.close();
+    }
+    if(!this.editOpened) {
+      this.editOpened = true;
+      const id = event.srcElement.attributes.id.nodeValue;
+      const editedData = this.data.find(data => data.id == id);
+      this.editDialog = this.dialog.open(EditProductComponent,
+        {height: '400px', width: '600px', data: editedData},);
+      this.editDialog.afterClosed().subscribe(
         {
-          this.getData();
+          next: () => {
+            this.getData();
+            this.editOpened = false;
+          }
         }
-      }
-    );
+      );
+    }
   }
 }
