@@ -7,6 +7,7 @@ class ProductPageResponseDto
     private string $name;
     private int $price;
     private string $categoryName;
+    private float $rate;
     private string $image;
 
     /**
@@ -55,6 +56,22 @@ class ProductPageResponseDto
     public function setCategoryName(string $categoryName): void
     {
         $this->categoryName = $categoryName;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRate(): float
+    {
+        return $this->rate;
+    }
+
+    /**
+     * @param float $rate
+     */
+    public function setRate(float $rate): void
+    {
+        $this->rate = $rate;
     }
 
     /**

@@ -9,7 +9,7 @@ class ProductMainPageResponseDto
     private int $price;
     private string $category;
     private float $rate;
-    private string $imageData;
+    private string $image;
 
     /**
      * @return int
@@ -94,16 +94,16 @@ class ProductMainPageResponseDto
     /**
      * @return string
      */
-    public function getImageData(): string
+    public function getImage(): string
     {
-        return $this->imageData;
+        return $this->image;
     }
 
     /**
-     * @param string $imageData
+     * @param string $image
      */
-    public function setImageData(string $imageData): void
+    public function setImage(string $image): void
     {
-        $this->imageData = $imageData;
+        $this->image = $image;
     }
 }

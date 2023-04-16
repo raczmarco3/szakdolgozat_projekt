@@ -141,6 +141,17 @@ class ProductController extends AbstractController
         return $productService->mainPageShowProducts($serializer, $productRepository, $imageRepository, $rateRepository,
             $rateService, $number);
     }
+
+    /**
+     * @Route("/get/{id}", methods={"GET"})
+     */
+    public function getProduct(SerializerInterface $serializer, ProductRepository $productRepository,
+                               ProductService $productService, ImageRepository $imageRepository,
+                               RateRepository $rateRepository, RateService $rateService, $id): JsonResponse
+    {
+        return $productService->getProduct($serializer, $productRepository, $imageRepository, $rateRepository,
+            $rateService, $id);
+    }
 }
 
 

@@ -5,6 +5,6 @@ export class Product {
   categoryName: string;
   createdAt: string;
   updatedAt: string;
-  image: string;
+  imageData: string;
   userId: number;
 }

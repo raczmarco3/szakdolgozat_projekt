@@ -6,6 +6,7 @@ import {ListCategoryComponent} from "./admin/category/list-category/list-categor
 import {ListMethodComponent} from "./admin/method/list-method/list-method.component";
 import {ListStatusComponent} from "./admin/status/list-status/list-status.component";
 import {ListProductComponent} from "./admin/product/list-product/list-product.component";
+import {ProductComponent} from "./product/product.component";
 
 const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: "admin", component: ListProductComponent},
   { path: "admin/category", component: ListCategoryComponent},
   { path: "admin/method", component: ListMethodComponent},
-  { path: "admin/status", component: ListStatusComponent}
+  { path: "admin/status", component: ListStatusComponent},
+  { path: "product/:id", component: ProductComponent }
 ];
 
 @NgModule({

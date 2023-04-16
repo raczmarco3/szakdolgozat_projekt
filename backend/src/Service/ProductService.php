@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Converter\JsonConverter;
 use App\Dto\RequestDto\ProductRequestDto;
 use App\Dto\ResponseDto\ProductMainPageResponseDto;
+use App\Dto\ResponseDto\ProductPageResponseDto;
 use App\Dto\ResponseDto\ProductResponseDto;
 use App\Entity\Image;
 use App\Entity\Product;
@@ -124,7 +125,7 @@ class ProductService
         $entityManager->flush();
 
         if(!empty($imgData)) {
-            $image = new Image();
+            $image = $imageRepository->findOneBy(["product" => $product]);
             $image->setImage($imgData);
             $image->setProduct($product);
             $image->setUser($user);
@@ -140,8 +141,8 @@ class ProductService
      * @throws NoResultException
      */
     public function mainPageShowProducts(SerializerInterface $serializer, ProductRepository $productRepository,
-                                         ImageRepository     $imageRepository, RateRepository $rateRepository,
-                                         RateService         $rateService, int $page): JsonResponse
+                                         ImageRepository $imageRepository, RateRepository $rateRepository,
+                                         RateService $rateService, int $page): JsonResponse
     {
         $limit = 15;
         if($page > 1) {
@@ -168,7 +169,7 @@ class ProductService
             $productMainPageResponseDto->setCategory($product->getCategory()->getName());
 
             $imgData = $imageRepository->findOneBy(["product" => $product]);
-            $productMainPageResponseDto->setImageData($imgData->getImage());
+            $productMainPageResponseDto->setImage($imgData->getImage());
 
             $rate = $rateService->getProductRate($rateRepository, $productRepository, $product->getId());
             $productMainPageResponseDto->setRate($rate->getRating());
@@ -180,6 +181,31 @@ class ProductService
             "totalProducts" => $count
         ];
         return JsonConverter::jsonResponseConverter($serializer, $returnedArray);
+    }
+
+    public function getProduct(SerializerInterface $serializer, ProductRepository $productRepository,
+                               ImageRepository $imageRepository, RateRepository $rateRepository,
+                               RateService $rateService, int $id): JsonResponse
+    {
+        $product = $productRepository->findOneby(["id" => $id]);
+
+        if(!$product) {
+            return new JsonResponse(["msg" => "Product not found!"], 404);
+        }
+
+        $productPageResponseDto = new ProductPageResponseDto();
+        $productPageResponseDto->setName($product->getName());
+        $productPageResponseDto->setPrice($product->getPrice());
+        $productPageResponseDto->setCategoryName($product->getCategory()->getName());
+
+        $imgData = $imageRepository->findOneBy(["product" => $product]);
+        $productPageResponseDto->setImage($imgData->getImage());
+
+        $rate = $rateService->getProductRate($rateRepository, $productRepository, $product->getId());
+        $productPageResponseDto->setRate($rate->getRating());
+
+        return JsonConverter::jsonResponseConverter($serializer, $productPageResponseDto);
+
     }
 
     private function setProduct(Product $product, ProductRequestDto $productRequestDto): Product

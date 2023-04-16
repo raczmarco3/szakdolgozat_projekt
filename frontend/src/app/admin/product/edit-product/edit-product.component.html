@@ -1,1 +1,31 @@
-<p>edit-product works!</p>
+<div mat-dialog-content>
+  <h1 class="pageMain">Termék hozzáadása</h1>
+
+  <form ngNativeValidate [formGroup]="editProductForm" (ngSubmit)="onSubmit($event)">
+    <label for="name">Név:</label>
+    <input type="text" name="name" formControlName="name" id="name" maxlength="255" [(ngModel)]="data.name" required>
+
+    <label for="price">Ár:</label>
+    <input type="number" name="price" formControlName="price" id="price" maxlength="255" [(ngModel)]="data.price" required>
+
+    <label for="category">Kategória</label>
+    <select name="category" formControlName="category" id="category" required>
+      <option>Válassz kategóriát</option>
+      <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
+      <option *ngIf="categories.length == 0">No category available! First add a Category!</option>
+    </select>
+
+    <label for="img">Kép:</label>
+    <input type="file" id="img" name="img" accept="image/*" (change)="fileChangeEvent($event)">
+    <a class="imgError" *ngIf="imageError != null">{{imageError}}</a>
+
+    <div class="add_button">
+      <button type="submit" name="add">Hozzáadás</button>
+    </div>
+  </form>
+
+  <div class="show_msg">
+    <p *ngIf="msg">{{msg}}</p>
+  </div>
+</div>
+<a class="close-link" (click)="onClose()">×</a>

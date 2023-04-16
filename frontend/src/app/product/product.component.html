@@ -1,0 +1,37 @@
+<div class="productBox">
+  <h2>{{product.name}}</h2>
+  <div class="productInnerBox">
+    <div class="productInnerBoxLeft">
+      <img src="{{product.image}}">
+    </div>
+
+    <div class="productInnerBoxRight">
+      <div class="productInnerBoxRightCont">
+        <div class="price">{{product.price}} Ft</div>
+        <div class="raktr">raktáron</div>
+        <button>Kosárba</button>
+
+        <div class="rate">Értékelés: {{product.rate}}</div>
+      </div>
+      <div class="rating">
+        Már megvetted ezt a terméket? Értékeld:
+        <form ngNativeValidate [formGroup]="rateForm" (ngSubmit)="onSubmit($event)">
+          <select formControlName="rate" [(ngModel)]='nrSelect' required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <div class="add_button">
+            <button type="submit" name="add">Értékelem</button>
+          </div>
+        </form>
+        <div class="ertekMsg" *ngIf="ertekMsg">{{ertekMsg}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hasonlo">
+  <h3>Hasonló termékek</h3>
+</div>
