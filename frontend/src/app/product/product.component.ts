@@ -18,7 +18,8 @@ export class ProductComponent {
   ertekMsg: string;
   jsonContent: JSON;
   obj: any;
-  nrSelect: number = 1;
+  nrSelect: number = 5;
+  realtedProducts: Product[] = [];
 
   constructor(private route: ActivatedRoute, private productService: ProductPageService) { }
 
@@ -37,6 +38,7 @@ export class ProductComponent {
       {
         next: (response) => {
           this.product = response;
+          this.getRelatedProducts();
         },
         error: (msg) => {
           this.msg = msg.error.msg;
@@ -65,6 +67,16 @@ export class ProductComponent {
       }
     );
   }
-
-
+  getRelatedProducts() {
+    this.productService.getRelatedProducts(this.product.categoryName, this.id).subscribe(
+      {
+        next: (response) => {
+          this.realtedProducts = response;
+        },
+        error: (msg) => {
+          this.msg = msg.error.msg;
+        }
+      }
+    );
+  }
 }

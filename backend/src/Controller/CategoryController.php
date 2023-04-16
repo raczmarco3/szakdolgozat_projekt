@@ -5,7 +5,11 @@ namespace App\Controller;
 use App\Converter\ValidationErrorJsonConverter;
 use App\Dto\RequestDto\CategoryRequestDto;
 use App\Repository\CategoryRepository;
+use App\Repository\ImageRepository;
+use App\Repository\ProductRepository;
+use App\Repository\RateRepository;
 use App\Service\CategoryService;
+use App\Service\RateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -116,6 +120,19 @@ class CategoryController extends AbstractController
 
         $categoryService = new CategoryService();
         return $categoryService->editCategory($id, $categoryRequestDto, $categoryRepository, $entityManager);
+    }
+
+    /**
+     * @Route("/related/{categoryName}/{productId}", methods={"GET"})
+     */
+    public function getRelatedProducts(ProductRepository $productRepository, CategoryRepository $categoryRepository,
+                                       $categoryName, ImageRepository $imageRepository, SerializerInterface $serializer,
+                                       RateRepository $rateRepository, RateService $rateService,
+                                       CategoryService $categoryService, $productId): JsonResponse
+    {
+        return $categoryService->getRelatedProducts($productRepository, $categoryRepository,
+                                       $categoryName, $imageRepository, $serializer,
+                                       $rateRepository, $rateService, $productId);
     }
 
 }

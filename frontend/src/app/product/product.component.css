@@ -50,7 +50,7 @@
 .rating select {
   width: 100%;
   padding: 5px;
-  margin-top: 3px;
+  margin-top: 5px;
 }
 .ertekMsg {
   margin-top: 10px;
@@ -66,4 +66,49 @@
 }
 .add_button button:hover {
   background-color: #bb1133;
+}
+.hasonlo {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-flow: row;
+}
+.product {
+  width: 200px;
+  padding: 20px;
+  margin: 20px;
+  float: left;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.product img {
+  width: inherit;
+  margin-bottom: 5px;
+  max-height: 200px;
+}
+.productlink {
+  color: #63b4cf;
+  text-decoration: none;
+}
+.productlink:hover {
+  color: #3ca1c3;
+}
+.product b {
+  display: block;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.addtocartbutton {
+  color: white;
+  background-color: black;
+  padding: 10px;
+  display: block;
+  margin: 10px 50px 20px;
+  text-decoration: none;
+}
+.addtocartbutton:hover {
+  color: grey;
+}
+.productBottom {
+  margin-top: auto;
 }

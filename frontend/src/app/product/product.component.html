@@ -32,6 +32,16 @@
     </div>
   </div>
 </div>
+<h3>Hasonló termékek</h3>
 <div class="hasonlo">
-  <h3>Hasonló termékek</h3>
+  <div *ngIf="msg">{{msg}}</div>
+  <div class="product" *ngFor="let product of realtedProducts">
+    <img src="{{product.image}}" alt="Product Image"/>
+    <a class="productlink" href="product/{{product.id}}">{{product.name}}</a>
+    <div class="productBottom">
+      <b>Értékelés: {{product.rate}}</b>
+      <div>{{product.price}} Ft</div>
+      <a class="addtocartbutton" href="#">Kosárba</a>
+    </div>
+  </div>
 </div>

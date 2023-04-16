@@ -5,8 +5,12 @@ namespace App\Service;
 use App\Converter\JsonConverter;
 use App\Dto\RequestDto\CategoryRequestDto;
 use App\Dto\ResponseDto\CategoryResponseDto;
+use App\Dto\ResponseDto\ProductMainPageResponseDto;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use App\Repository\ImageRepository;
+use App\Repository\ProductRepository;
+use App\Repository\RateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -78,6 +82,43 @@ class CategoryService
         $entityManager->flush();
 
         return new JsonResponse(["msg" => "Category updated!"], 200);
+    }
+
+    public function getRelatedProducts(ProductRepository $productRepository, CategoryRepository $categoryRepository,
+                                       $categoryName, ImageRepository $imageRepository, SerializerInterface $serializer,
+                                       RateRepository $rateRepository, RateService $rateService, int $productId): JsonResponse
+    {
+        $category = $categoryRepository->findOneBy(["name" => $categoryName]);
+        if(!$category) {
+            return new JsonResponse(["msg" => "Category not found!"], 404);
+        }
+
+        $products = $productRepository->findBy(["category" => $category], ["createdAt" => "desc"], 5, 0);
+        if(empty($products)) {
+            return new JsonResponse(["msg" => "There are related products yet!"], 404);
+        }
+
+        $productMainPageResponseDtoArray = [];
+
+        foreach($products as $product)
+        {
+            if($product->getId() != $productId) {
+                $productMainPageResponseDto = new ProductMainPageResponseDto();
+                $productMainPageResponseDto->setId($product->getId());
+                $productMainPageResponseDto->setName($product->getName());
+                $productMainPageResponseDto->setPrice($product->getPrice());
+                $productMainPageResponseDto->setCategory($product->getCategory()->getName());
+
+                $imgData = $imageRepository->findOneBy(["product" => $product]);
+                $productMainPageResponseDto->setImage($imgData->getImage());
+
+                $rate = $rateService->getProductRate($rateRepository, $productRepository, $product->getId());
+                $productMainPageResponseDto->setRate($rate->getRating());
+
+                $productMainPageResponseDtoArray[] = $productMainPageResponseDto;
+            }
+        }
+        return JsonConverter::jsonResponseConverter($serializer, $productMainPageResponseDtoArray);
     }
 
     private function setCategory(Category $category, CategoryRequestDto $categoryRequestDto): Category
