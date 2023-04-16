@@ -6,7 +6,7 @@
   max-width: 50%;
 }
 .productInnerBoxLeft img {
-  width: 80%;
+  max-height: 450px;
 }
 .productInnerBoxRight {
   width: 40%;
@@ -111,4 +111,7 @@
 }
 .productBottom {
   margin-top: auto;
+}
+h3 {
+  text-decoration: underline;
 }
