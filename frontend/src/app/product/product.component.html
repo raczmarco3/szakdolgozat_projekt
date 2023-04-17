@@ -28,13 +28,14 @@
           </div>
         </form>
         <div class="ertekMsg" *ngIf="ertekMsg">{{ertekMsg}}</div>
+        <div class="ertekMsg" *ngIf="ratingMsg">{{ratingMsg}}</div>
       </div>
     </div>
   </div>
 </div>
 <h3>Hasonló termékek</h3>
+<div *ngIf="msg">{{msg}}</div>
 <div class="hasonlo">
-  <div *ngIf="msg">{{msg}}</div>
   <div class="product" *ngFor="let product of realtedProducts">
     <img src="{{product.image}}" alt="Product Image"/>
     <a class="productlink" href="product/{{product.id}}">{{product.name}}</a>

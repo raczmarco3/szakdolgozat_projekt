@@ -4,6 +4,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {UserService} from "../service/user-service";
 import {LoginService} from "../service/login-service";
 import {Router} from "@angular/router"
+import {CartService} from "../service/cart-service";
 
 @Component({
   selector: 'app-login',
@@ -16,15 +17,16 @@ export class LoginComponent {
   obj: any;
 
   constructor(public dialogRef: MatDialogRef<LoginComponent>, public userService: UserService,
-              private loginService: LoginService, private router: Router) {}
+              private loginService: LoginService, private router: Router, private cartService: CartService) {
+  }
 
   loginForm = new FormGroup({
     username: new FormControl(),
-    password:new FormControl(),
+    password: new FormControl(),
   });
 
   onSubmit(event: any) {
-    if(event.submitter.name == "login") {
+    if (event.submitter.name == "login") {
       this.obj = {
         "username": this.loginForm.get('username')?.value,
         "password": this.loginForm.get('password')?.value
@@ -41,7 +43,7 @@ export class LoginComponent {
             window.location.reload();
           },
           error: (msg) => {
-            this.msg = msg.error.msg;
+            this.msg = "Hibás felhasználónév vagy jelszó!";
           }
         }
       );
@@ -51,5 +53,4 @@ export class LoginComponent {
   onClose() {
     this.dialogRef.close();
   }
-
 }

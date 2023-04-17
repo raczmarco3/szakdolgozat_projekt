@@ -102,4 +102,12 @@ class CartController extends AbstractController
         return $cartService->removeFromCart($cartRepository, $cartRequestDto, $entityManager, $user);
     }
 
+    /**
+     * @Route("/productnumber", methods={"GET"})
+     */
+    public function getProductsNumberInCart(CartRepository $cartRepository, #[CurrentUser] ?User $user, CartService $cartService)
+    {
+        return $cartService->getProductsNumberInCart($cartRepository, $user);
+    }
+
 }

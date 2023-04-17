@@ -1,0 +1,15 @@
+<h1 class="pageMain">Kosár</h1>
+<b *ngIf="!loggedIn">A kosár használatához jelentkezz be!</b>
+
+<div class="products" *ngIf="loggedIn">
+  <div class="product" *ngFor="let product of data.products">
+    <img src="{{product.imageData}}" alt="Product Image"/>
+    <a class="productlink" href="product/{{product.id}}">{{product.name}}</a>
+    <div class="productBottom">
+      <b>Értékelés: {{product.rate}}</b>
+      <div>{{product.price}} Ft</div>
+      <a class="addtocartbutton" (click)="removeFromCart(product.id)">Eltávolítás</a>
+    </div>
+  </div>
+</div>
+

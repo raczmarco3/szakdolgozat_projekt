@@ -33,7 +33,7 @@
 }
 .addtocartbutton {
   color: white;
-  background-color: black;
+  background-color: tomato;
   padding: 10px;
   display: block;
   margin: 10px 50px 20px;
@@ -42,9 +42,6 @@
 }
 .addtocartbutton:hover {
   color: grey;
-}
-.mainPagePagination {
-  text-align: center;
 }
 .productBottom {
   margin-top: auto;

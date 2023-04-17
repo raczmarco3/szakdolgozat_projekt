@@ -4,6 +4,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginComponent} from "../login/login.component";
 import {LoginService} from "../service/login-service";
 import {UserService} from "../service/user-service";
+import {CartService} from "../service/cart-service";
 
 @Component({
   selector: 'app-menu',
@@ -18,12 +19,15 @@ export class MenuComponent {
   loginDialog: any;
   loggedIn: boolean = false;
   isAdmin: boolean = false;
+  cartNumber: number = 0;
 
-  constructor(public dialog: MatDialog, private loginService: LoginService, private userService: UserService) { }
+  constructor(public dialog: MatDialog, private loginService: LoginService, private userService: UserService,
+              private cartService: CartService) { }
 
   ngOnInit() {
     if(this.loginService.getData("loggedIn") == "true") {
       this.loggedIn = true;
+      this.getProductNumberInCart();
     }
 
     if(this.loginService.getData("role") == "ROLE_ADMIN") {
@@ -74,17 +78,26 @@ export class MenuComponent {
         }
       );
     }
+
   }
   logout() {
     this.userService.logout().subscribe(
       {
         next: (response) => {
-          this.loginService.removeData("username");
-          this.loginService.removeData("role");
-          this.loginService.removeData("loggedIn");
+          this.loginService.clearData();
           window.location.href = "/";
         }
       });
   }
 
+  getProductNumberInCart() {
+    this.cartService.getProductNumber().subscribe(
+      {
+        next: (response) => {
+          this.cartNumber = response.msg;
+          this.loginService.saveData("cartNumber", this.cartNumber);
+          console.log(this.loginService.getData("cartNumber"));
+        }
+      });
+  }
 }

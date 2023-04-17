@@ -1,8 +1,9 @@
 <h1 class="pageMain">Termékek</h1>
 
+<p class="table-msg" *ngIf="errorMsg">{{errorMsg}}</p>
+<p class="table-msg" *ngIf="cartMsg">{{cartMsg}}</p>
+<p class="table-msg" *ngIf="errorStatus == 0">Server Down!</p>
 <div class="products">
-  <p class="table-msg" *ngIf="errorMsg">{{errorMsg}}</p>
-  <p class="table-msg" *ngIf="errorStatus == 0">Server Down!</p>
   <div class="product" *ngFor="let product of data | paginate: { itemsPerPage: 15, currentPage: pagination,
                   totalItems: allProducts }">
     <img src="{{product.image}}" alt="Product Image"/>
@@ -10,7 +11,7 @@
     <div class="productBottom">
       <b>Értékelés: {{product.rate}}</b>
       <div>{{product.price}} Ft</div>
-      <a class="addtocartbutton" href="#">Kosárba</a>
+      <a class="addtocartbutton" (click)="addToCart(product.id)">Kosárba</a>
     </div>
   </div>
 </div>

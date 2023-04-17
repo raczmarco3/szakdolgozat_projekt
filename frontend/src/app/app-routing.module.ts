@@ -8,6 +8,7 @@ import {ListStatusComponent} from "./admin/status/list-status/list-status.compon
 import {ListProductComponent} from "./admin/product/list-product/list-product.component";
 import {ProductComponent} from "./product/product.component";
 import {CategoryComponent} from "./category/category.component";
+import {CartComponent} from "./cart/cart.component";
 
 const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: "admin/method", component: ListMethodComponent},
   { path: "admin/status", component: ListStatusComponent},
   { path: "product/:id", component: ProductComponent },
-  { path: "category", component: CategoryComponent}
+  { path: "category", component: CategoryComponent},
+  { path: "cart", component: CartComponent}
 ];
 
 @NgModule({

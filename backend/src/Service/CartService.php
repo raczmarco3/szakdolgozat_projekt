@@ -98,4 +98,12 @@ class CartService
 
         return new JsonResponse(["msg" => "Product removed from cart!"], 200);
     }
+
+    public function getProductsNumberInCart(CartRepository $cartRepository, User $user): JsonResponse
+    {
+        $cart = $cartRepository->findOneBy(["user" => $user]);
+        $products = $cart->getProducts();
+
+        return new JsonResponse(["msg" => count($products)]);
+    }
 }

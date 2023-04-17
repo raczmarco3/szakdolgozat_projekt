@@ -20,6 +20,7 @@ export class ProductComponent {
   obj: any;
   nrSelect: number = 5;
   realtedProducts: Product[] = [];
+  ratingMsg: string;
 
   constructor(private route: ActivatedRoute, private productService: ProductPageService) { }
 
@@ -62,7 +63,7 @@ export class ProductComponent {
           this.getData();
         },
         error: (msg) => {
-          this.msg = msg.error.msg;
+          this.ratingMsg = "Ha értékelni szeretnél jelentkezz be!";
         }
       }
     );

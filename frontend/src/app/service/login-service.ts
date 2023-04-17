@@ -7,7 +7,7 @@ export class LoginService {
 
   constructor() { }
 
-  public saveData(key: string, value: string) {
+  public saveData(key: string, value: any) {
     localStorage.setItem(key, value);
   }
 
