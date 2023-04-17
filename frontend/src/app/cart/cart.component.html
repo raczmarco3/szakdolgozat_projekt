@@ -1,6 +1,8 @@
 <h1 class="pageMain">Kosár</h1>
 <b *ngIf="!loggedIn">A kosár használatához jelentkezz be!</b>
 
+<div *ngIf="msg">{{msg}}</div>
+<div *ngIf="!data.products || data.products.length == 0">A kosarad jelenleg üres!</div>
 <div class="products" *ngIf="loggedIn">
   <div class="product" *ngFor="let product of data.products">
     <img src="{{product.imageData}}" alt="Product Image"/>
@@ -12,4 +14,18 @@
     </div>
   </div>
 </div>
+
+<form class="orderForm" ngNativeValidate [formGroup]="orderForm" (ngSubmit)="onSubmit()" *ngIf="data.products && data.products.length > 0">
+  <label for="address">Cím:</label>
+  <input type="text" name="address" formControlName="address" id="address" maxlength="255" required>
+
+  <label for="method">Fizetési opció</label>
+  <select name="method" id="method" formControlName="method" required>
+    <option value="4">Utánvét</option>
+  </select>
+
+  <div class="add_button">
+    <button type="submit" name="add" class="orderButton">Megrendelem</button>
+  </div>
+</form>
 

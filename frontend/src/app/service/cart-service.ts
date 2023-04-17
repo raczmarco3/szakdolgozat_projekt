@@ -35,4 +35,10 @@ export class CartService
   {
     return this.http.get<Msg>(`${this.baseUrl}`+'productnumber', {withCredentials: true});
   }
+
+  orderProducts(jsonContent: JSON) {
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/json');
+    return this.http.post('http://localhost:8000/api/order/add', jsonContent, {headers: headers, withCredentials: true});
+  }
 }
