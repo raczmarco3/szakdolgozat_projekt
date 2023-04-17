@@ -29,6 +29,7 @@ import { AddProductComponent } from './admin/product/add-product/add-product.com
 import { EditProductComponent } from './admin/product/edit-product/edit-product.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProductComponent } from './product/product.component';
+import { CategoryComponent } from './category/category.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ProductComponent } from './product/product.component';
     ListProductComponent,
     AddProductComponent,
     EditProductComponent,
-    ProductComponent
+    ProductComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,

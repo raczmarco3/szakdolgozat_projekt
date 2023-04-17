@@ -120,6 +120,20 @@ class CategoryService
         }
         return JsonConverter::jsonResponseConverter($serializer, $productMainPageResponseDtoArray);
     }
+    public function getCategoryProducts(int $categoryId, CategoryRepository $categoryRepository,
+                                        ProductRepository $productRepository, ImageRepository $imageRepository,
+                                        RateRepository $rateRepository): JsonResponse
+    {
+        $category = $categoryRepository->find($categoryId);
+        if(!$category) {
+            return new JsonResponse(["msg" => "Category not found!"], 404);
+        }
+
+        $products = $productRepository->findBy(["category" => $category]);
+        if(empty($products)) {
+            return new JsonResponse(["msg" => "There are no products in this category!"], 404);
+        }
+    }
 
     private function setCategory(Category $category, CategoryRequestDto $categoryRequestDto): Category
     {
