@@ -1,4 +1,4 @@
-<div class="productBox">
+<div class="productBox" *ngIf="product">
   <h2>{{product.name}}</h2>
   <div class="productInnerBox">
     <div class="productInnerBoxLeft">
@@ -33,9 +33,9 @@
     </div>
   </div>
 </div>
-<h3>Hasonló termékek</h3>
+<h3 *ngIf="product">Hasonló termékek</h3>
 <div *ngIf="msg">{{msg}}</div>
-<div class="hasonlo">
+<div class="hasonlo" *ngIf="product">
   <div class="product" *ngFor="let product of realtedProducts">
     <img src="{{product.image}}" alt="Product Image"/>
     <a class="productlink" href="product/{{product.id}}">{{product.name}}</a>

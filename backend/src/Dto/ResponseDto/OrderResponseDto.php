@@ -77,11 +77,11 @@ class OrderResponseDto
     }
 
     /**
-     * @return \DateTimeImmutable|null
+     * @return String
      */
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): String
     {
-        return $this->createdAt;
+        return $this->createdAt->format("Y-m-d h:i:s");
     }
 
     /**

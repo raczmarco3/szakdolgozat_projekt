@@ -1,6 +1,7 @@
 <div class="navbar">
   <a href="">Főoldal</a>
   <a href="/category">Kategóriák</a>
+  <a href="/orders" *ngIf="loggedIn">Rendelések</a>
   <a href="/cart">Kosár [{{cartNumber}}]</a>
   <a class="mth" *ngIf="!loggedIn" (click)="login(true)">Bejelentkezés</a>
   <a class="mth" *ngIf="!loggedIn" (click)="register(true)">Regisztráció</a>

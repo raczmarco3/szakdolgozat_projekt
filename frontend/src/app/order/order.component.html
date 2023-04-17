@@ -1,0 +1,32 @@
+<h1 class="pageMain">Rendelések</h1>
+<p *ngIf="msg">{{msg}}</p>
+<table *ngIf="!msg">
+  <tr>
+    <td>ID</td>
+    <td>Termékek</td>
+    <td>Cím</td>
+    <td>Megrendelve</td>
+    <td>Státusz</td>
+    <td>Fizetés</td>
+  </tr>
+  <tr *ngFor="let order of data">
+    <td>{{order.id}}</td>
+    <td>
+      <div class="prdLinks" *ngFor="let product of order.productsResponseDtoArray">
+        <a href="/product/{{product.id}}">{{product.name}}</a>
+      </div>
+    </td>
+    <td>
+      {{order.address}}
+    </td>
+    <td>
+      {{order.createdAt}}
+    </td>
+    <td>
+      {{order.statusName}}
+    </td>
+    <td>
+      {{order.methodName}}
+    </td>
+  </tr>
+</table>
